@@ -45,9 +45,39 @@
 .scbtOptionsSavedWrapper .round-button:hover, 
 .scbtOptionsSavedWrapper .round-button:focus, 
 .scbtOptionsSavedWrapper .round-button:active, 
-.scbtOptionsSavedWrapper .round-button.focused
+.scbtOptionsSavedWrapper .round-button.focused, 
+
+.az2:hover, 
+.az2:focus, 
+.az2:active,
+.az2.focused, 
+
+.az3:hover, 
+.az3:focus, 
+.az3:active,
+.az3.focused, 
+
+.az4:hover, 
+.az4:focus, 
+.az4:active,
+.az4.focused, 
+
+.az5:hover, 
+.az5:focus, 
+.az5:active,
+.az5.focused, 
+
+.az6:hover, 
+.az6:focus, 
+.az6:active,
+.az6.focused,
+
+.scbtClipsToggleMenu button:hover, 
+.scbtClipsToggleMenu button:focus, 
+.scbtClipsToggleMenu button:active,
+.scbtClipsToggleMenu button.focused
 {
-     background: lawngreen !important;
+    background: lawngreen !important;
 }
 
 .scbt-options-wrapper, 
@@ -63,7 +93,9 @@
 .scbt-mobile .scbt7,
 .scbt-mobile .scbt10,
 .scbt-mobile .scbt16,
-.scbt-mobile .scbt17 
+.scbt-mobile .scbt17, 
+.scbtClipsToggleMenu,
+.scbtClipsMenuWrapper
 {
     display: none;
 }
@@ -74,13 +106,21 @@
 .scbtChatToggleMenu.scbt-bl,
 .scbtOptionsMenu.scbt-bl,
 .scbtChatWrapper.scbt-bl,
-.scbtChatTitle.scbt-bl 
+.scbtChatTitle.scbt-bl,
+.scbtClipsToggleMenu.scbt-bl,
+.scbtClipsMenuWrapper.scbt-bl
 {
      display: block;
 }
 
-.scbt-options-wrapper.scbt-fl,
-.scbtChatMenu.scbt-fl
+.scbt-mobile .scbtToggleButton2.scbt-fl, 
+.scbt-options-wrapper.scbt-bl.scbt-fl, 
+.scbtSideMenu.scbt-fl,
+.scbtChatToggleMenu.scbt-fl,
+.scbtOptionsMenu.scbt-fl,
+.scbtChatWrapper.scbt-fl,
+.scbtChatTitle.scbt-fl,
+.scbtClipsToggleMenu.scbt-fl
 {
      display: flex;
 }
@@ -97,6 +137,7 @@
 .scbtChatMenu button,
 .scbtOptionsMenu button,
 .scbt-kick .scbt-speed li,
+.scbtClipsToggleMenu button
 {
     cursor: pointer;
 }
@@ -146,7 +187,7 @@
 
 }
 
-.scbtSideMenu, .scbtChatToggleMenu {
+.scbtSideMenu, .scbtChatToggleMenu, .scbtClipsToggleMenu {
     position: fixed;
     top: 305px;
     z-index: 10000000;
@@ -155,7 +196,7 @@
 }
 
 .scbtChatToggleMenu {
-     top: 355px;
+    top: 355px;
 }
 
 .scbtSideMenu button, .scbtChatToggleMenu button {
@@ -266,7 +307,7 @@
      top: 0px;
 }
 
-.scbt-desktop .scbtChatToggleMenu {
+.scbt-desktop .scbtChatToggleMenu, .scbt-desktop .scbtClipsToggleMenu {
      top: 45px;
 }
 
@@ -278,7 +319,7 @@
 .scbt-desktop .scbtChatMenu {
      top: 0px;
      right: 235px;
-     width: fit-content;     
+     width: fit-content; 
 }
 
 .scbt-desktop .scbtChatWrapper {
@@ -339,7 +380,7 @@
     transition-timing-function: cubic-bezier(.4,0,.2,1);
 }
 
-.scbt-kick #scbtClipsMenu.scbt-bl {
+.scbt-kick .scbtClipsMenuWrapper {
     height: 400px;
     width: 300px;
     overflow-x: scroll;
@@ -348,9 +389,10 @@
     z-index: 1000000;
     top: 5px;
     left: 5px;
+    background-color: #111;
 }
 
-.scbt-kick .scbtOptionsMenu button {
+.scbt-kick .scbtOptionsMenu button, .scbtClipsToggleMenu {
     --tw-border-opacity: 1;
     border-color: rgb(83 252 24 / var(--tw-border-opacity));
     border-radius: 0.5rem;

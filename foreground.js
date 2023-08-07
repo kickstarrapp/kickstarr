@@ -1508,7 +1508,7 @@ function scbt_helper_get_options() {
 
 
 // ***** DB FUNCTIONS
-// done
+
 async function scbt_get_binary_if_db_exists(dbName) {
   var dbFound = false;
   if (dbName) { } else { return dbFound; }
@@ -1530,7 +1530,7 @@ async function scbt_get_binary_if_db_exists(dbName) {
 }
 
 
-// done
+
 function scbt_get_arr_of_all_dbnames() {
   window.scbtSavedStreamsArr = [];
   indexedDB.databases().then((arr) => {
@@ -1540,7 +1540,7 @@ function scbt_get_arr_of_all_dbnames() {
       for (var i = 0; i < arrl; i++) {
         var dbName = arr[i].name;
         if (dbName.startsWith('savedchat') ) {
-          var dbArr = scbt_get_arr_from_dbname_string(dbName); // scbt_get_arr_from_dbname_string
+          var dbArr = scbt_get_arr_from_dbname_string(dbName);
           var obj = {};
           obj.dbName = dbName;
           obj.serviceid = dbArr[1];
@@ -1555,7 +1555,7 @@ function scbt_get_arr_of_all_dbnames() {
 }
 
 
-// done here
+ here
 function scbt_helper_build_chat_by_dbname_string(dbName) {
   window.scbtSearchingMessageIdsArr = [];
   var request = indexedDB.open(dbName, 10);
@@ -1668,7 +1668,7 @@ function scbt_user_chat_delete_by_videoid(e) {
   if (e.srcElement) { } else { return false; }
   if (e.srcElement.dataset) { } else { return false; }
   if (e.srcElement.dataset.dbname) { } else { return false; }
-  if (e) { e.preventDefault(); }
+  if (e.preventDefault) { e.preventDefault(); }
   
   window.scbtSearchingMessageIdsArr = [];
   setTimeout(function(){
@@ -1694,7 +1694,7 @@ function scbt_user_chat_mark_by_videoid(e) {
   if (e.srcElement) { } else { return false; }
   if (e.srcElement.dataset) { } else { return false; }
   if (e.srcElement.dataset.dbname) { } else { return false; }
-  if (e) { e.preventDefault(); }
+  if (e.preventDefault) { e.preventDefault(); }
 
   var str = localStorage.getItem(window.location.href);
   if (str) {
@@ -1712,7 +1712,7 @@ function scbt_user_chat_export_by_videoid(e) {
   if (e.srcElement) { } else { return false; }
   if (e.srcElement.dataset) { } else { return false; }
   if (e.srcElement.dataset.dbname) { } else { return false; }
-  if (e) { e.preventDefault(); }
+  if (e.preventDefault) { e.preventDefault(); }
   
   window.scbtSearchingMessageIdsArr = [];
   var request = indexedDB.open(e.srcElement.dataset.dbname, 10);
@@ -1751,7 +1751,6 @@ function scbt_user_chat_export_by_videoid(e) {
           }
           var message = chatObj.message;
           if (message) {
-            // message = message.replace(/[^a-zA-Z0-9!._\-@\s]/g, ' ');
             str2 = message.replace(/\/‘’,‚“”„"`~«´<>/g, ' ');
             str2 = str2.replace(/(\r\n|\n|\r)/gm, "");
             str2 = str2.replaceAll(',', ' ');
@@ -1883,7 +1882,7 @@ function scbt_get_usernames_for_mention_menu(e) {
 
 function scbt_user_search_multiple_saved_chat(e) {  
   if (e) {
-    // if ( e.preventDefault ) { e.preventDefault(); }
+    if (e.preventDefault) { e.preventDefault(); }
   }
   var str = scbt_get_str_for_search();
 
@@ -1955,7 +1954,7 @@ function scbt_user_search_multiple_saved_chat(e) {
                 if (!e2.target.result) { setTimeout(function(){ scbt_helper_toast('Error: get database for multiple search chat e2 target result failed.'); }, 2700);  return false; }
                 var chatObjArr = e2.target.result;
                 if (chatObjArr.length < 1) { scbt_helper_toast('Error: this stream chat not found for display');  return false; }
-                window.scbtChatARef.textContent = 'Saved Chat From All'; // + channelid + ' on ' + serviceid + ' ' + theDate
+                window.scbtChatARef.textContent = 'Saved Chat From All'; 
                 window.scbtChatBRef.textContent = labelMessage;
                 chatObjArr = scbt_get_arr_sortedtimes_from_arr(chatObjArr);
                 window.scbtChatWrapperRef.classList.add('scbt-bl');
@@ -2036,7 +2035,7 @@ return false;
 function scbt_user_search_saved_chat(e) {
   window.scbtSearchingMessageIdsArr = [];
   if (e) {
-    if ( e.preventDefault ) { e.preventDefault(); }
+    if (e.preventDefault) { e.preventDefault(); }
   }
   if (window.scbtDbNameToSearch) { } else { setTimeout(function(){ scbt_helper_toast('Error: no active or loaded chat to search.'); }, 500); return false; }
 
@@ -2131,25 +2130,7 @@ function scbt_user_search_saved_chat(e) {
         [].forEach.call(chatObjArr, function(chatObj) {
           if ( (chatObj.anevent == 1) || (chatObj.staff === 1) ) {
             var classString = scbt_get_str_for_chat_classes_from_obj(chatObj);
-/*              
-anevent: 1
-donation: 0
-founder: 0
-gifter: 0
-id: 238
-itemid: 1688922450366
-message: "Group Situation\nClipped by Balerion25 img https://clips.kick.com/clips/0b87b2d6-cb47-4b20-a7b7-e242ee33e600-thumbnail.jpeg"
-moderator: 0
-newSub: 0
-og: 0
-owner: 0
-staff: 0
-sub: 0
-timestamp: "10:07AM"
-username: "Balerion25"
-verified: 0
-window.scbtChatBRef.textContent = dbArr[2] + ' on ' + dbArr[1] + ' ' + chatObjArr[0].message;
-*/
+
           if (chatObj.message) {
             if (chatObj.message.indexOf('clips.kick.com') > -1) {
               var m = chatObj.message;
@@ -2238,7 +2219,7 @@ window.scbtChatBRef.textContent = dbArr[2] + ' on ' + dbArr[1] + ' ' + chatObjAr
 }
 
 
-// done
+
 function scbt_set_db_for_saving(dbName, startSaving) {
   if (!dbName) { 
     console.error('Error: chat database not supported');
@@ -2312,7 +2293,7 @@ function scbt_set_db_for_saving(dbName, startSaving) {
   };
 }
 
-// done
+
 function scbt_set_db_save_chat_obj(obj) {
 
   var request = indexedDB.open(window.scbtDbName, 10);
@@ -2338,7 +2319,7 @@ function scbt_set_db_save_chat_obj(obj) {
 }
 
 
-// done
+
 function scbt_get_str_dbname(startSaving) {
   if (window.scbtDbName) {
     return window.scbtDbName;
@@ -2374,7 +2355,7 @@ function scbt_get_str_dbname(startSaving) {
 
 
 // ************* CSV export/import functions
-// done
+
 function scbt_get_csv_file_from_str(str) {
   if (str) {
     var csv_mime_type = 'text/csv';
@@ -2655,11 +2636,16 @@ function scbt_helper_save_word_list(json, listType) {
 
 
 async function scbt_user_search_for_saved_chat() {
+  if (!window.scbtDbNameToSearch) { scbt_helper_toast( ' No active stream or VOD chat '); return false; } 
+
   var str = localStorage.getItem(window.location.href);
+  console.log('localstorage is: ' + str);
   if (str) {
     var dbExists = await scbt_get_binary_if_db_exists(str);
     console.log('dbExists for localstorage is: ' + dbExists);
     if (dbExists === true) {
+      // load the database
+      console.log('loading database from localStorage');
       var e = {};
       e.srcElement = {};
       e.srcElement.dataset = {};
@@ -2671,17 +2657,24 @@ async function scbt_user_search_for_saved_chat() {
 
   var str = 'savedchat' + '&' + scbt_get_str_serviceid() + '&' + scbt_get_str_channelid() + '&' + scbt_get_str_videoid();
   var dbExists = await scbt_get_binary_if_db_exists(str);
+  console.log('dbExists for indexeddb is: ' + dbExists);
   if (dbExists === true) {
-    var e = {};
-    e.srcElement = {};
-    e.srcElement.dataset = {};
-    e.srcElement.dataset.dbname = str;
+    // load the database
+      console.log('loading database from indexeddb');
+      var e = {};
+      e.srcElement = {};
+      e.srcElement.dataset = {};
+      e.srcElement.dataset.dbname = str;
+      scbt_user_chat_load_by_videoid(e);
+      return false;
   }
 
   var str = scbt_get_str_serviceid();
   var str2 = scbt_get_str_channelid();
   var str3 = scbt_get_str_videoid();
   scbt_helper_load_chat_replay_from_api(str, str2, str3);
+
+  // put a not found message here
   return false;
 }
 
@@ -2856,7 +2849,49 @@ function scbt_helper_get_menu(app, element, thefile, firstTime) {
         if (elemArr[0]) {  elemArr[0].addEventListener('click', scbt_user_search_chat_toggle); }
 
         elemArr = document.body.getElementsByClassName('scbt24');
-        if (elemArr[0]) {  elemArr[0].addEventListener('click', scbt_user_search_for_saved_chat); }
+        if (elemArr[0]) {  elemArr[0].addEventListener('click', scbt_user_toggle_clips_menu); }
+
+        elemArr = document.body.getElementsByClassName('scbt30');
+        if (elemArr[0]) {  elemArr[0].addEventListener('click', scbt_user_load_recent_clips_begin); }
+
+        elemArr = document.body.getElementsByClassName('scbt31');
+        if (elemArr[0]) {  elemArr[0].addEventListener('click', scbt_user_load_recent_clips_begin); }
+
+        elemArr = document.body.getElementsByClassName('scbt32');
+        if (elemArr[0]) {  elemArr[0].addEventListener('click', scbt_user_load_recent_clips_begin); }
+
+        elemArr = document.body.getElementsByClassName('scbt33');
+        if (elemArr[0]) {  elemArr[0].addEventListener('click', scbt_user_load_recent_clips_begin); }
+
+        elemArr = document.body.getElementsByClassName('scbt34');
+        if (elemArr[0]) {  elemArr[0].addEventListener('click', scbt_user_load_recent_clips_begin); }
+
+        elemArr = document.body.getElementsByClassName('scbt35');
+        if (elemArr[0]) {  elemArr[0].addEventListener('click', scbt_user_load_recent_clips_begin); }
+
+        elemArr = document.body.getElementsByClassName('scbt36');
+        if (elemArr[0]) {  elemArr[0].addEventListener('click', scbt_user_load_recent_clips_begin); }
+
+        elemArr = document.body.getElementsByClassName('scbt30d');
+        if (elemArr[0]) {  elemArr[0].addEventListener('click', scbt_user_clear_recent_clips_begin); }
+
+        elemArr = document.body.getElementsByClassName('scbt31d');
+        if (elemArr[0]) {  elemArr[0].addEventListener('click', scbt_user_clear_recent_clips_begin); }
+
+        elemArr = document.body.getElementsByClassName('scbt32d');
+        if (elemArr[0]) {  elemArr[0].addEventListener('click', scbt_user_clear_recent_clips_begin); }
+
+        elemArr = document.body.getElementsByClassName('scbt33d');
+        if (elemArr[0]) {  elemArr[0].addEventListener('click', scbt_user_clear_recent_clips_begin); }
+
+        elemArr = document.body.getElementsByClassName('scbt34d');
+        if (elemArr[0]) {  elemArr[0].addEventListener('click', scbt_user_clear_recent_clips_begin); }
+
+        elemArr = document.body.getElementsByClassName('scbt35d');
+        if (elemArr[0]) {  elemArr[0].addEventListener('click', scbt_user_clear_recent_clips_begin); }
+
+        elemArr = document.body.getElementsByClassName('scbt36d');
+        if (elemArr[0]) {  elemArr[0].addEventListener('click', scbt_user_clear_recent_clips_begin); }
 
         return window.scbtSideMenuRef;
       } // if (element == 'scbtSideMenu') {
@@ -2962,7 +2997,7 @@ function scbt_helper_get_menu(app, element, thefile, firstTime) {
 
 
 // *************** Build functions
-// done
+
 function scbt_helper_build_chat_line_from_obj(chatObj, chatObjFirst) {
   var classString = scbt_get_str_for_chat_classes_from_obj(chatObj);
   if (chatObjFirst) {
@@ -2985,7 +3020,7 @@ function scbt_helper_build_chat_line_from_arr(chatArr, chatArrFirst) {
 }
 
 
-// done
+
 function scbt_helper_build_list_of_saved_stream_chat_by_arr(arr) {
   var arrl = arr.length;
   for (var i = 0; i < arrl; i++) {
@@ -3011,7 +3046,7 @@ function scbt_make_toast() {
     body = body[0];
   }
   if (elemArr[0]) { } else {
-    var theHTML = '<div id="scbtSnackbar" class="scbtSnackbar"></div><div id="scbtLoading"><svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 44 44" stroke="#fff"><g fill="none" fill-rule="evenodd" stroke-width="2"><circle cx="22" cy="22" r="1"><animate attributeName="r" begin="0s" dur="1.8s" values="1; 20" calcMode="spline" keyTimes="0; 1" keySplines="0.165, 0.84, 0.44, 1" repeatCount="indefinite"/><animate attributeName="stroke-opacity" begin="0s" dur="1.8s" values="1; 0" calcMode="spline" keyTimes="0; 1" keySplines="0.3, 0.61, 0.355, 1" repeatCount="indefinite"/></circle><circle cx="22" cy="22" r="1"><animate attributeName="r" begin="-0.9s" dur="1.8s" values="1; 20" calcMode="spline" keyTimes="0; 1" keySplines="0.165, 0.84, 0.44, 1" repeatCount="indefinite"/><animate attributeName="stroke-opacity" begin="-0.9s" dur="1.8s" values="1; 0" calcMode="spline" keyTimes="0; 1" keySplines="0.3, 0.61, 0.355, 1" repeatCount="indefinite"/></circle></g></svg></div>';
+    var theHTML = '<div id="scbtSnackbar" class="scbtSnackbar"></div>';
     body.insertAdjacentHTML('afterbegin', theHTML);
     window.scbtSnackbarRef = document.body.getElementsByClassName('scbtSnackbar')[0];
     setTimeout(function(){ scbt_helper_toast('Status: building menus'); }, 500);
@@ -3091,7 +3126,7 @@ function scbt_helper_options_turn_on_keybinds() {
 
     if ( (e.keyCode == '16') && (e.altKey === true) )  {
       console.log('you pressed shift + Alt to toggle the main menu');
-      e.preventDefault();
+      if (e.preventDefault) { e.preventDefault(); }
       if (window.scbtSideMenuRef.classList.contains('scbt-bl') ) {
         window.scbtSideMenuRef.classList.remove('scbt-bl');
         window.scbtChatInputRef.focus();
@@ -3106,7 +3141,7 @@ function scbt_helper_options_turn_on_keybinds() {
     // scbtChatToggleMenu
     if ( (e.keyCode == '90') && (e.altKey === true) )  {
       console.log('you pressed Z + Alt to toggle the scbtChatToggleMenu');
-      e.preventDefault();
+      if (e.preventDefault) { e.preventDefault(); }
       if (window.scbtChatToggleMenuRef.classList.contains('scbt-bl') ) {
         scbt_helper_keybind_close();
         window.scbtChatInputRef.focus();
@@ -3121,7 +3156,7 @@ function scbt_helper_options_turn_on_keybinds() {
     // scbtOptionsMenuRef
     if ( (e.keyCode == '88') && (e.altKey === true) )  {
       console.log('you pressed Z + Alt to toggle the options menu');
-      e.preventDefault();
+      if (e.preventDefault) { e.preventDefault(); }
       if (window.scbtOptionsMenuRef.classList.contains('scbt-bl') ) {
         scbt_helper_keybind_close();
         window.scbtChatInputRef.focus();
@@ -3136,7 +3171,7 @@ function scbt_helper_options_turn_on_keybinds() {
 
     if ( (e.keyCode == '67') && (e.altKey === true) )  {
       console.log('you pressed X + Alt to toggle the options menu bring up hide menu');
-      e.preventDefault();
+      if (e.preventDefault) { e.preventDefault(); }
       if (window.scbtOptionsMenuRef.classList.contains('scbt-bl') ) {
         scbt_helper_keybind_close();
         window.scbtChatInputRef.focus();
@@ -3155,7 +3190,7 @@ function scbt_helper_options_turn_on_keybinds() {
 
     if ( (e.keyCode == '86') && (e.altKey === true) )  {
       console.log('you pressed C + Alt to toggle the options menu bring up feature menu');
-      e.preventDefault();
+      if (e.preventDefault) { e.preventDefault(); }
       if (window.scbtOptionsMenuRef.classList.contains('scbt-bl') ) {
         scbt_helper_keybind_close();
         window.scbtChatInputRef.focus();
@@ -3174,7 +3209,7 @@ function scbt_helper_options_turn_on_keybinds() {
 
     if ( (e.keyCode == '66') && (e.altKey === true) )  {
       console.log('you pressed V + Alt to toggle the options menu bring up save menu');
-      e.preventDefault();
+      if (e.preventDefault) { e.preventDefault(); }
       if (window.scbtOptionsMenuRef.classList.contains('scbt-bl') ) {
         scbt_helper_keybind_close();
         window.scbtChatInputRef.focus();
@@ -3192,79 +3227,79 @@ function scbt_helper_options_turn_on_keybinds() {
 
     if ( (e.keyCode == '81') && (e.altKey === true) )  {
       console.log('you pressed Q + Alt to toggle Broadcaster Messages Only');
-      e.preventDefault();
+      if (e.preventDefault) { e.preventDefault(); }
       scbt_user_toggle_chats('owner');
       return false;
     }
     if ( (e.keyCode == '87') && (e.altKey === true) )  {
       console.log('you pressed W + Alt to toggle Moderator Messages Only');
-      e.preventDefault();
+      if (e.preventDefault) { e.preventDefault(); }
       scbt_user_toggle_chats('moderator');
       return false;
     }
     if ( (e.keyCode == '69') && (e.altKey === true) )  {
       console.log('you pressed E + Alt to toggle Sub Messages Only');
-      e.preventDefault();
+      if (e.preventDefault) { e.preventDefault(); }
       scbt_user_toggle_chats('sub');
       return false;
     }
     if ( (e.keyCode == '82') && (e.altKey === true) )  {
       console.log('you pressed R + Alt to toggle Sub + Moderator Messages Only');
-      e.preventDefault();
+      if (e.preventDefault) { e.preventDefault(); }
       scbt_user_toggle_chats('mod_sub');
       return false;
     }
     if ( (e.keyCode == '84') && (e.altKey === true) )  {
       console.log('you pressed T + Alt to toggle VIP Only');
-      e.preventDefault();
+      if (e.preventDefault) { e.preventDefault(); }
       scbt_user_toggle_chats('vip');
       return false;
     }
     if ( (e.keyCode == '89') && (e.altKey === true) )  {
       console.log('you pressed Y + Alt to toggle Donation Chats Only');
-      e.preventDefault();
+      if (e.preventDefault) { e.preventDefault(); }
       scbt_user_toggle_chats('donation');
       return false;
     }
     if ( (e.keyCode == '85') && (e.altKey === true) )  {
       console.log('you pressed U + Alt to toggle Mention Messages Only');
-      e.preventDefault();
+      if (e.preventDefault) { e.preventDefault(); }
       scbt_user_toggle_chats('mention');
       return false;
     }
     if ( (e.keyCode == '73') && (e.altKey === true) )  {
       console.log('you pressed I + Alt to toggle Hashtag Messages Only');
-      e.preventDefault();
+      if (e.preventDefault) { e.preventDefault(); }
       scbt_user_toggle_chats('hashtag');
       return false;
     }
     if ( (e.keyCode == '79') && (e.altKey === true) )  {
       console.log('you pressed O + Alt to toggle OG Messages Only'); 
-      e.preventDefault();
+      if (e.preventDefault) { e.preventDefault(); }
       scbt_user_toggle_chats('og');
       return false;
     }
     if ( (e.keyCode == '80') && (e.altKey === true) )  {
       console.log('you pressed P + Alt to toggle text only chat');  // scbt13
-      e.preventDefault();
+      if (e.preventDefault) { e.preventDefault(); }
       scbt_user_chat_text_only();
       return false;
     }
     if ( (e.keyCode == '219') && (e.altKey === true) )  {
       console.log('you pressed [ + Alt to  View Top of Chat'); // scbt14
-      e.preventDefault();
+      if (e.preventDefault) { e.preventDefault(); }
       scbt_user_chat_up_to_top();
       return false;
     }
     if ( (e.keyCode == '221') && (e.altKey === true) )  {
       console.log('you pressed ] + Alt to  View Bottom of Chat'); // scbt15
-      e.preventDefault();
+      if (e.preventDefault) { e.preventDefault(); }
       scbt_user_chat_down_to_bottom();
       return false;
     }
     if ( (e.keyCode == '220') && (e.altKey === true) )  {
       console.log('you pressed  + Alt to  Change Chat Font Size'); // scbt20
-      e.preventDefault();
+      if (e.preventDefault) { e.preventDefault(); }
       scbt_user_chat_font_size();
       return false;
     }
@@ -3275,7 +3310,7 @@ function scbt_helper_options_turn_on_keybinds() {
 
 
 // ****************** GET FUNCTIONS THAT RETURN A VALUE
-// done 
+ 
 function scbt_get_str_for_search() {
   var str = '';
   str = window.scbtChatSearchInputTextRef.value;
@@ -3286,7 +3321,7 @@ function scbt_get_str_for_search() {
   return str;
 }
 
-// done
+
 function scbt_get_str_for_chat_classes_from_obj(obj) {
   var str = '';
   if (obj.sub === 1) {
@@ -3325,7 +3360,7 @@ function scbt_get_str_for_chat_classes_from_obj(obj) {
   obj = null; return str;
 }
 
-// done
+
 function scbt_get_str_for_chat_classes_from_arr(arr) {
   var str = '';
   if (arr) {
@@ -3366,7 +3401,7 @@ function scbt_get_str_for_chat_classes_from_arr(arr) {
   arr = null; return str;
 }
 
-// done
+
 function scbt_get_obj_cleaned_message_from_obj(obj) {
   if (obj && obj.message) {
     obj.message = obj.message.toLowerCase();
@@ -3381,7 +3416,7 @@ function scbt_get_obj_cleaned_message_from_obj(obj) {
   return obj;
 }
 
-// done
+
 function scbt_get_obj_cleaned_username_from_obj(obj) {
   if (obj && obj.username) {
     obj.username = obj.username.toLowerCase();
@@ -3410,14 +3445,14 @@ function scbt_get_str_serviceid() {
 }
 
 
-// done
+
 function scbt_get_arr_video_elem() {
   var elemArr = document.body.getElementsByTagName('video');
   return elemArr;
 }
 
 
-// done
+
 function scbt_get_arr_sortedtimes_from_arr(arr) {
   if (!arr) {
     return false;
@@ -3444,7 +3479,7 @@ function scbt_get_arr_sortedtimes_from_arr(arr) {
 }
 
 
-// done
+
 function scbt_get_str_seconds_from_hour_minute_time(str) {
   str = str.replace('@', '');
   str = str.replace('.', '');
@@ -3461,7 +3496,7 @@ function scbt_get_str_seconds_from_hour_minute_time(str) {
 }
 
 
-// done
+
 function scbt_get_binary_role_from_chat_message(elem, parameter) {
   var toReturn = 0;
 
@@ -3566,7 +3601,7 @@ function scbt_get_binary_role_from_chat_message(elem, parameter) {
 }
 
 
-// done
+
 function scbt_get_str_military_hours_minutes_from_timestamp(timestamp) {
   timestamp = timestamp.trim(); // 10:01AM
   if (timestamp) {
@@ -3584,7 +3619,7 @@ function scbt_get_str_military_hours_minutes_from_timestamp(timestamp) {
 }
 
 
-// done
+
 function scbt_get_number_seconds_difference_from_two_timestamps(startTime, timeToCompare) {
   var diff = Math.abs(new Date('2011/11/11 ' + startTime) - new Date('2011/11/11 ' + timeToCompare));
   var diff2 = Math.floor((diff/1000)/60);
@@ -3593,7 +3628,7 @@ function scbt_get_number_seconds_difference_from_two_timestamps(startTime, timeT
 }
 
 
-// done
+
 function scbt_get_arr_from_dbname_string(dbName) {
   var arr = [];
   if (typeof dbName === 'string') {
@@ -4044,13 +4079,6 @@ function scbt_add_listener_for_options_menu() {
   [].forEach.call(elemArr, function(elem) {
     if (elem) { elem.addEventListener('click', scbt_handler_for_options_menu, false); }
   });
-
-  elemArr = document.body.getElementsByClassName('scbtRecentClipsButton');
-  if (elemArr[0]) { elemArr[0].addEventListener('click', scbt_user_load_recent_followed_clips); }
-
-  elemArr = document.body.getElementsByClassName('scbtRecentStreamsButton');
-  if (elemArr[0]) { elemArr[0].addEventListener('click', scbt_user_load_recent_followed_streams); }
-
   return false;
 }
 
@@ -4089,7 +4117,7 @@ function scbt_handler_for_options_menu(e) {
 
 function scbt_handler_for_chat_mention_menu_keystrokes(e) {
   if (e.key == 'ArrowUp')  {
-    e.preventDefault();
+    if (e.preventDefault) { e.preventDefault(); }
     var selectedElem = document.activeElement;
     if (selectedElem) {
       var parentElm = selectedElem.parentElement;
@@ -4107,7 +4135,7 @@ function scbt_handler_for_chat_mention_menu_keystrokes(e) {
   }
 
   if (e.key == 'ArrowDown')  {
-    e.preventDefault();
+    if (e.preventDefault) { e.preventDefault(); }
     var selectedElem = document.activeElement;
     if (selectedElem) {
       var parentElm = selectedElem.parentElement;
@@ -4125,14 +4153,14 @@ function scbt_handler_for_chat_mention_menu_keystrokes(e) {
   }
 
   if (e.key == 'Escape')  {
-    e.preventDefault();
+    if (e.preventDefault) { e.preventDefault(); }
     window.document.removeEventListener('keydown', scbt_handler_for_chat_mention_menu_keystrokes);  
     scbt_user_chat_close_mention_menu('');
     return false;
   }
 
   if (e.key == 'Enter')  {
-    e.preventDefault();
+    if (e.preventDefault) { e.preventDefault(); }
     window.document.removeEventListener('keydown', scbt_handler_for_chat_mention_menu_keystrokes);
     var selectedElem = document.activeElement;
     var str = '';
@@ -4146,7 +4174,7 @@ function scbt_handler_for_chat_mention_menu_keystrokes(e) {
 
 
 function scbt_handler_for_chat_mention_menu_usernames(e) {
-  e.preventDefault();
+  if (e.preventDefault) { e.preventDefault(); }
   window.document.removeEventListener('keydown', scbt_handler_for_chat_mention_menu_keystrokes);
   scbt_user_chat_close_mention_menu(e.target.textContent);
   return false;
@@ -4176,7 +4204,7 @@ function scbt_handler_for_chat_mention_menu(e) {
 
 
 function scbt_handler_for_mention_menu_click(e) {
-    e.preventDefault();
+    if (e.preventDefault) { e.preventDefault(); }
     var elem = this.previousElementSibling;
     window.scbtChatInputRef.value = '@' + elem.textContent + ' ';
     window.scbtChatSearchInputTextRef.value = '@' + elem.textContent + ' ';
@@ -4201,10 +4229,10 @@ function scbt_handler_for_mention_menu_click(e) {
 };
 
 
-// done
+
 function scbt_handler_sort_saved_streams_by_serviceid(e) {
   if (e) {
-    e.preventDefault();
+    if (e.preventDefault) { e.preventDefault(); }
   }
   window.scbtChatPreviousContentRef.innerHTML = '';
   window.scbtSavedStreamsArr.sort((a,b) => (a.serviceid.toLowerCase() > b.serviceid.toLowerCase()) ? 1 : ((b.serviceid.toLowerCase() > a.serviceid.toLowerCase()) ? -1 : 0));
@@ -4213,10 +4241,10 @@ function scbt_handler_sort_saved_streams_by_serviceid(e) {
   e = a = b = null; return false;
 }
 
-// done
+
 function scbt_handler_sort_saved_streams_by_channelid(e) {
   if (e) {
-    e.preventDefault();
+    if (e.preventDefault) { e.preventDefault(); }
   }
   window.scbtChatPreviousContentRef.innerHTML = '';
   window.scbtSavedStreamsArr.sort((a,b) => (a.channelid.toLowerCase() > b.channelid.toLowerCase()) ? 1 : ((b.channelid.toLowerCase() > a.channelid.toLowerCase()) ? -1 : 0));
@@ -4225,10 +4253,10 @@ function scbt_handler_sort_saved_streams_by_channelid(e) {
   e = a = b = null; return false;
 }
 
-// done
+
 function scbt_handler_sort_saved_streams_by_videoid(e) {
   if (e) {
-    e.preventDefault();
+    if (e.preventDefault) { e.preventDefault(); }
   }
   window.scbtChatPreviousContentRef.innerHTML = '';
   window.scbtSavedStreamsArr.sort((a,b) => (a.videoid.toLowerCase() > b.videoid.toLowerCase()) ? 1 : ((b.videoid.toLowerCase() > a.videoid.toLowerCase()) ? -1 : 0));
@@ -4237,10 +4265,10 @@ function scbt_handler_sort_saved_streams_by_videoid(e) {
   e = a = b = null; return false;
 }
 
-// done
+
 function scbt_handler_sort_saved_streams_by_current(e) {
   if (e) {
-    e.preventDefault();
+    if (e.preventDefault) { e.preventDefault(); }
   }
   window.scbtChatPreviousContentRef.innerHTML = '';
   window.scbtSavedStreamsArr.sort((a,b) => (a.videoid.toLowerCase() > b.videoid.toLowerCase()) ? 1 : ((b.videoid.toLowerCase() > a.videoid.toLowerCase()) ? -1 : 0));
@@ -4263,7 +4291,7 @@ function scbt_handler_sort_saved_streams_by_current(e) {
 
 function scbt_handler_click_username_insert_into_search(e) {
   if (e) {
-    e.preventDefault();
+    if (e.preventDefault) { e.preventDefault(); }
     if (e.target) {
       if (e.target.textContent) {
         var elemArr = document.body.getElementsByClassName('scbtChatSearchInputText');
@@ -4280,7 +4308,7 @@ function scbt_handler_click_username_insert_into_search(e) {
 
 function scbt_helper_chat_listen() {
   if (window.scbtOptions.observer) { return false; }
-  targetNode = scbt_get_arr_chatbox_elem(); // 
+  targetNode = scbt_get_arr_chatbox_elem(); 
   if (targetNode[0]) {
     var config = { childList: true,
                  attributes: false,
@@ -4295,7 +4323,7 @@ function scbt_helper_chat_listen() {
               if (mutation.addedNodes) {
                 var arrl = mutation.addedNodes.length;
                 for (var i=0; i < arrl; i++) { 
-                  scbt_helper_process_chat_line(mutation.addedNodes[i], true); // here
+                  scbt_helper_process_chat_line(mutation.addedNodes[i], true); 
                 }
               }  // if (mutation.addedNodes) {
             }   // end if (mutation.type === 'childList') {      
@@ -4928,7 +4956,7 @@ function scbt_user_toggle_chat_menu() {
 
 function scbt_user_toggle_options_menu(e) {
   if (e) {
-    e.preventDefault();
+    if (e.preventDefault) { e.preventDefault(); }
     if (e.target) {
       if (e.target.id == 'scbt2') {
         if (e.target.classList.contains('focused') ) {
@@ -4944,6 +4972,9 @@ function scbt_user_toggle_options_menu(e) {
   if (elemArr[0]) {
     if (elemArr[0].className.match('scbt-bl') ) { 
       elemArr[0].classList.remove('scbt-bl');
+      document.body.getElementsByClassName('scbtClipsMenuWrapper')[0].remove('scbt-bl');
+      document.body.getElementsByClassName('scbtClipsMenuTitle')[0].innerHTML = '';
+      document.body.getElementsByClassName('scbtClipsMenuContent')[0].innerHTML = '';
     } else {
       elemArr[0].classList.add('scbt-bl');
     }
@@ -4952,6 +4983,7 @@ function scbt_user_toggle_options_menu(e) {
   document.body.scrollTop = document.documentElement.scrollTop = 0;
   e = elemArr = null; return false;
 }
+
 
 function scbt_handler_click_timestamp_go_to_video(e) {
   if (e) {
@@ -5006,7 +5038,7 @@ function scbt_set_db_error_message(error) {
   }
 }
 
-// done
+
 function scbt_set_vod_length() {
   // duration is 30449.461 SECONDS, minutes is: 507,  seconds is: 29.46099999999933
   var elemArr = scbt_get_arr_video_elem();
@@ -5064,27 +5096,27 @@ function scbt_get_arr_username_elems_from_parent_element(elem) {
   return elemArr;
 }
 
-// done
+
 function scbt_get_arr_chats() {
   var elemArr = document.body.querySelectorAll('[data-chat-entry]');
   return elemArr;
 }
 
-// done
+
 function scbt_get_str_videoid() {
   var str = new Date().toISOString().slice(0, 10) + '-' + window.scbtchannelid;
   return str;
 }
 
-// done
+
 function scbt_get_str_channelid() {
   var channelid = window.location.pathname.substr(1);
   return channelid;
 }
 
-// done
+
 function scbt_get_arr_chatbox_elem() {
-  var elemArr = document.body.querySelectorAll('#chatroom .overflow-y-scroll.py-3'); // .chat-container .chat-content #chatroom #chatroom-top .py-3
+  var elemArr = document.body.querySelectorAll('#chatroom .overflow-y-scroll.py-3');
   return elemArr;
 }
 
@@ -5724,7 +5756,7 @@ function scbt_user_toggle_chats(e) {
     if (typeof e == 'string') {
       parameter = e;
     } else {
-      e.preventDefault();
+      if (e.preventDefault) { e.preventDefault(); }
       if (e.target) {
         if (e.target.id) {
           switch ( e.target.id ) {
@@ -6161,228 +6193,567 @@ function scbt_user_toggle_verified_chats() {
 }
 
 
-async function scbt_user_search_for_saved_chat() {
-  if (!window.scbtDbNameToSearch) { scbt_helper_toast( ' No active stream or VOD chat '); return false; } 
+// BEGINNING HERE
+function scbt_shuffle_array(arr) {
+  var currentIndex = arr.length;
+  var randomIndex;
+  while (currentIndex != 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+    [arr[currentIndex], arr[randomIndex]] = [arr[randomIndex], arr[currentIndex]];
+  }
+  return arr;
+}
 
-  console.log(window.location.href); // https://kick.com/video/37f316af-f3ea-4244-9226-51ac052a5a72
-  var str = localStorage.getItem(window.location.href); // null  savedchat&kick&bige&2023-07-11-bige
-  console.log('localstorage is: ' + str);
-  if (str) {
-    var dbExists = await scbt_get_binary_if_db_exists(str);
-    console.log('dbExists for localstorage is: ' + dbExists);
-    if (dbExists === true) {
-      // load the database
-      console.log('loading database from localStorage');
-      var e = {};
-      e.srcElement = {};
-      e.srcElement.dataset = {};
-      e.srcElement.dataset.dbname = str;
-      scbt_user_chat_load_by_videoid(e);
+
+function scbt_get_videoObj() {
+  var videoObj = {};
+  videoObj.video_id = '';                  
+  videoObj.video_thumbnail = '';           
+  videoObj.video_title = '';               
+  
+  videoObj.video_url = '';                 
+  videoObj.video_duration = '';            
+  videoObj.video_view_count = '';          
+  videoObj.video_likes_count = '';         
+  videoObj.video_created_at = '';          
+   
+  videoObj.video_parent_category = '';     
+  videoObj.video_category_slug = '';       
+  videoObj.video_category_responsive = ''; 
+
+  videoObj.video_channel_slug = '';        
+  videoObj.video_channel_username = '';    
+
+  videoObj.video_creator_slug = '';        
+  videoObj.video_creator_username = '';    
+  return videoObj;
+}
+
+
+function scbt_get_videoObj_populated(videoObj, clipObj) {
+  if (clipObj) {
+      if (clipObj.id) {
+        videoObj.video_id = clipObj.id;
+      }
+      if (clipObj.thumbnail_url) {
+        videoObj.video_thumbnail = clipObj.thumbnail_url;
+      }
+      if (clipObj.title) {
+        videoObj.video_title = clipObj.title;
+      }
+
+      if (clipObj.video_url) {
+        videoObj.video_url = clipObj.video_url;
+      }
+      if (clipObj.duration) {
+        videoObj.video_duration = clipObj.duration;
+      }
+      if (clipObj.view_count) {
+        videoObj.video_view_count = clipObj.view_count;
+      }
+      if (clipObj.likes_count) {
+        videoObj.video_likes_count = clipObj.likes_count;
+      }
+
+      if (clipObj.created_at) {
+        var created_atArr = clipObj.created_at.split('T');
+        videoObj.video_created_at = created_atArr[0];
+      }
+
+      if (clipObj.category && clipObj.category.parent_category) {
+        videoObj.video_parent_category = clipObj.category.parent_category;
+      }
+      if (clipObj.category && clipObj.category.slug) {
+        videoObj.video_category_slug = clipObj.category.slug;
+      }
+      if (clipObj.category && clipObj.category.responsive) {
+        videoObj.video_category_responsive = clipObj.category.responsive;
+      }
+
+      if (clipObj.channel && clipObj.channel.slug) {
+        videoObj.video_channel_slug = clipObj.channel.slug;
+      }
+      if (clipObj.channel && clipObj.channel.username) {
+        videoObj.video_channel_username = clipObj.channel.username;
+      }
+
+      if (clipObj.creator && clipObj.creator.slug) {
+        videoObj.video_creator_slug = clipObj.creator.slug;
+      }
+      if (clipObj.creator && clipObj.creator.username) {
+        videoObj.video_creator_username = clipObj.creator.username;
+      }
+    }
+  return videoObj;
+}
+
+
+function scbt_user_clear_recent_clips_begin(e) {
+  console.log('scbt_user_clear_recent_clips_begin');
+  if (!e) { return false; }
+  if (e) {
+    if (e.preventDefault) { e.preventDefault(); }
+    if (!e.target) { return false; }
+    if (!e.target.id) { return false; }
+
+    // Followed Feed Clips
+    if (e.target.id == 'scbt30d') {
+      for (var str in localStorage) {
+        if (str) {
+          if ( str.indexOf('scbtFollowedClip') > -1) {
+            localStorage.removeItem(str);
+          }
+          if ( str.indexOf('scbtFollowedChannels') > -1) {
+            localStorage.removeItem(str);
+          }
+        }
+      }
+      scbt_helper_toast('Success: followed feed cache cleared.');
       return false;
     }
+
+    // Followed Feed Streams
+    if (e.target.id == 'scbt31d') {
+      for (var str in localStorage) {
+        if (str) {
+          if ( str.indexOf('scbtFollowedStream') > -1) {
+            localStorage.removeItem(str);
+          }
+          if ( str.indexOf('scbtFollowedChannels') > -1) {
+            localStorage.removeItem(str);
+          }
+        }
+      }
+      scbt_helper_toast('Success: followed feed cache cleared.');
+      return false;
+    }
+
+    // Fortnite Clips
+    if (e.target.id == 'scbt32d') {
+      for (var str in localStorage) {
+        if (str) {
+          if ( str.indexOf('scbtfortniteClip') > -1) {
+            localStorage.removeItem(str);
+          }
+        }
+      }
+      scbt_helper_toast('Success: Fortnite feed cache cleared.');
+      return false;
+    }
+
+    // Call of Duty Warzone Clips
+    if (e.target.id == 'scbt33d') {
+      for (var str in localStorage) {
+        if (str) {
+          if ( str.indexOf('scbtcall-of-duty-warzone-2.0Clip') > -1) {
+            localStorage.removeItem(str);
+          }
+        }
+      }
+      scbt_helper_toast('Success: Call of Duty Warzone feed cache cleared.');
+      return false;
+    }
+
+    // Valorant Clips
+    if (e.target.id == 'scbt34d') {
+      for (var str in localStorage) {
+        if (str) {
+          if ( str.indexOf('scbtvalorantClip') > -1) {
+            localStorage.removeItem(str);
+          }
+        }
+      }
+      scbt_helper_toast('Success: Valorant feed cache cleared.');
+      return false;
+    }
+
+    // Music Clips
+    if (e.target.id == 'scbt35d') {
+      for (var str in localStorage) {
+        if (str) {
+          if ( str.indexOf('scbtlive-musicClip') > -1) {
+            localStorage.removeItem(str);
+          }
+        }
+      }
+      scbt_helper_toast('Success: Live Music feed cache cleared.');
+      return false;
+    }
+
+    // Chatting Clips
+    if (e.target.id == 'scbt36d') {
+      for (var str in localStorage) {
+        if (str) {
+          if ( str.indexOf('scbtjust-chattingClip') > -1) {
+            localStorage.removeItem(str);
+          }
+        }
+      }
+      scbt_helper_toast('Success: Just Chatting feed cache cleared.');
+      return false;
+    }
+
   }
-
-  var str = 'savedchat' + '&' + scbt_get_str_serviceid() + '&' + scbt_get_str_channelid() + '&' + scbt_get_str_videoid();
-  var dbExists = await scbt_get_binary_if_db_exists(str);
-  console.log('dbExists for indexeddb is: ' + dbExists);
-  if (dbExists === true) {
-    // load the database
-      console.log('loading database from indexeddb');
-      var e = {};
-      e.srcElement = {};
-      e.srcElement.dataset = {};
-      e.srcElement.dataset.dbname = str;
-      // scbt_user_chat_load_by_videoid(e);
-      // return false;
-  }
-
-  var str = scbt_get_str_serviceid();
-  var str2 = scbt_get_str_channelid();
-  var str3 = scbt_get_str_videoid();
-  scbt_helper_load_chat_replay_from_api(str, str2, str3);
-
-  // put a not found message here
   return false;
 }
 
 
+function scbt_user_load_recent_clips_begin(e) {
+  if (!e) {  return false; }
+  if (e) {
+    if (e.preventDefault) { e.preventDefault(); }
+    if (!e.target) {  return false; }
+    if (!e.target.id) {  return false; }
+      console.log('doing scbt_user_load_recent_clips_begin with id: ' + e.target.id);
+      
+      window.scbtOptionsMenuRef.classList.remove('scbt-bl');
+      
+      var elemArr = document.body.getElementsByClassName('scbtLoading');
+      if (elemArr[0]) {
+        elemArr[0].style.display = 'block';
+      }
+      var elemArr = document.body.getElementsByClassName('scbtClipsMenuContent');
+      if (elemArr[0]) {
+        elemArr[0].innerHTML = '';
+      }
+      var elemArr = document.body.getElementsByClassName('scbtClipsMenuTitle');
+      if (elemArr[0]) {
+        elemArr[0].innerHTML = '';
+      }
+
+      var today = 'scbtFollowedChannels' + new Date().toISOString().slice(0, 10);
+      var str = localStorage.getItem(today);
+      if (str) {
+        window.scbtFollowedChannelsArr = JSON.parse(str);
+        window.scbtFollowedChannelsArr = scbt_shuffle_array(window.scbtFollowedChannelsArr);
+      }
+      // Followed Feed Clips 
+      if (e.target.id == 'scbt30') {
+        elemArr[0].innerHTML = '<h3>Recent Clips from Followed</h3>';
+        if (str) {
+          scbt_loop_through_followed('Clip');
+          return false;
+        } else {
+          scbt_get_followed_channels_from_api('Clip');
+          return false;
+        }
+      }
+      // Followed Feed Streams
+      if (e.target.id == 'scbt31') {
+        elemArr[0].innerHTML = '<h3>Recent Stream from Followed</h3>';
+        if (str) {
+          scbt_loop_through_followed('Stream');
+          return false;
+        } else {
+          scbt_get_followed_channels_from_api('Stream');
+          return false;
+        }
+      }
+
+      // Fortnite Clips
+      if (e.target.id == 'scbt32') {
+        console.log('!!! one');
+        elemArr[0].innerHTML = '<h3>Recent Fortnite Clips</h3>';
+        var today = 'scbtfortniteClip' + new Date().toISOString().slice(0, 10) + '1';
+        console.log('!!! ' + today);
+        var str = localStorage.getItem(today);
+        console.log(str);
+        if (str) {
+          scbt_loop_through_recent('fortnite');
+          return false;
+        } else {
+          scbt_get_recent_clips_from_api('fortnite');
+          return false;
+        }
+      }
+
+      // Call of Duty Warzone Clips
+      if (e.target.id == 'scbt33') {
+        elemArr[0].innerHTML = '<h3>Recent Call of Duty Clips</h3>';
+        var today = 'scbtcall-of-duty-warzone-2.0Clip' + new Date().toISOString().slice(0, 10) + '1';
+        console.log('!!! ' + today);
+        var str = localStorage.getItem(today);
+        console.log(str);
+        if (str) {
+          scbt_loop_through_recent('call-of-duty-warzone-2.0');
+          return false;
+        } else {
+          scbt_get_recent_clips_from_api('call-of-duty-warzone-2.0');
+          return false;
+        }
+      }
+
+      // Valorant Clips
+      if (e.target.id == 'scbt34') {
+        elemArr[0].innerHTML = '<h3>Recent Valorant Clips</h3>';
+        var today = 'scbtvalorantClip' + new Date().toISOString().slice(0, 10) + '1';
+        console.log('!!! ' + today);
+        var str = localStorage.getItem(today);
+        console.log(str);
+        if (str) {
+          scbt_loop_through_recent('valorant');
+          return false;
+        } else {
+          scbt_get_recent_clips_from_api('valorant');
+          return false;
+        }
+      }
+
+      // Music Clips
+      if (e.target.id == 'scbt35') {
+        elemArr[0].innerHTML = '<h3>Recent Music Clips</h3>';
+        var today = 'scbtlive-musicClip' + new Date().toISOString().slice(0, 10) + '1';
+        console.log('!!! ' + today);
+        var str = localStorage.getItem(today);
+        console.log(str);
+        if (str) {
+          scbt_loop_through_recent('live-music');
+          return false;
+        } else {
+          scbt_get_recent_clips_from_api('live-music');
+          return false;
+        }
+      }
+
+      // Chatting Clips
+      if (e.target.id == 'scbt36') {
+        elemArr[0].innerHTML = '<h3>Recent Chatting Clips</h3>';
+        var today = 'scbtjust-chattingClip' + new Date().toISOString().slice(0, 10) + '1';
+        console.log('!!! ' + today);
+        var str = localStorage.getItem(today);
+        console.log(str);
+        if (str) {
+          scbt_loop_through_recent('just-chatting');
+          return false;
+        } else {
+          scbt_get_recent_clips_from_api('just-chatting');
+          return false;
+        }
+      }
+
+    }
+  return false;
+} 
 
 
+// scbtFollowedChannels 2023-08-06 clips or stream
+async function scbt_loop_through_followed(videoTypeStr) {
+  console.log('doing scbt_loop_through_followed with ' + videoTypeStr);
+  console.log(window.scbtFollowedChannelsArr);
+  var arrl = window.scbtFollowedChannelsArr.length;
+  console.log(arrl);
+  for (var i = 0; i < arrl; i++) {
+    var today = 'scbtFollowed' + videoTypeStr + new Date().toISOString().slice(0, 10) + window.scbtFollowedChannelsArr[i];
+    var str = localStorage.getItem(today); 
+    if (str) { 
+      var videoObj = JSON.parse(str);
+      scbt_helper_build_recent_feed(videoObj);
+    } else {
+      if (videoTypeStr == 'Clip') {
+        await scbt_get_clips_from_api(window.scbtFollowedChannelsArr[i]);
+      }
+      if (videoTypeStr == 'Stream') {
+        await scbt_get_stream_from_api(window.scbtFollowedChannelsArr[i]);
+      }
+    }
+  }
+  var elemArr = document.body.getElementsByClassName('scbtLoading');
+  if (elemArr[0]) {
+    elemArr[0].style.display = 'none';
+  }
+  return false;
+}
 
+// scbtfortniteClip2023-08-061 fortnite
+async function scbt_loop_through_recent(categoryStr) {
+  console.log('doing scbt_loop_through_recent with ' + categoryStr);
+  for (var i = 0; i < 20; i++) {
+    var today = 'scbt' + categoryStr + 'Clip' + new Date().toISOString().slice(0, 10)  + i;
+    var str = localStorage.getItem(today); 
+    if (str) { 
+      var videoObj = JSON.parse(str);
+      scbt_helper_build_recent_feed(videoObj);
+    } else {
+      await scbt_get_recent_clips_from_api(categoryStr);
+    }
+  }
+  
+  var ul = document.querySelector('.scbtClipsMenuContent');
+  for (var i = ul.children.length; i >= 0; i--) {
+    ul.appendChild(ul.children[Math.random() * i | 0]);
+  }
+
+  var elemArr = document.body.getElementsByClassName('scbtLoading');
+  if (elemArr[0]) {
+    elemArr[0].style.display = 'none';
+  }
+  return false;
+}
 
 
 function scbt_get_followed_channels_from_api(nextCursor) {
-  if (nextCursor == 'clips') {
+  if (nextCursor == 'Clip') {
     nextCursor = 0;
     window.scbtGetWhat = 'clips';
   }
-  if (nextCursor == 'streams') {
+  if (nextCursor == 'Stream') {
     nextCursor = 0;
     window.scbtGetWhat = 'streams';
   }
 
-fetch('https://kick.com/api/v2/channels/followed?cursor=' + nextCursor,
+  fetch('https://kick.com/api/v2/channels/followed?cursor=' + nextCursor,
   {
-    method: 'GET',
-    mode: 'cors',
-    cache: 'no-cache',
-  })
-  .then(function(res){ if (res.ok) { return res.json(); } else { return Promise.reject(res.status); } })
-  .then(function(resp){ 
-  if ( (resp == null || resp.length === 0) || (isNaN(resp) == false) ) { console.log('api error1'); console.log( resp ); } else {
-    if (resp == 'error') {
-      console.log('api error2'); serviceid = channelid = videoid = res = arr = arrl = arr2 = resp = null; return false;
-    } else {
-      
-      console.log('RESPONSE followed');
-      console.log( resp );
-      console.log(typeof resp); // object
-
-      if (typeof resp != 'object') { console.log('api error2'); return false; }
-
-        if (resp.nextCursor && resp.nextCursor != '0') {
-          window.scbtnextCursor = resp.nextCursor;
-        } else {
-          window.scbtnextCursor = null;
-        }
-        if (resp.channels) { } else { console.log('api error3'); return false; }
-
-        var arrl = resp.channels.length;
-        for (var i = 0; i < arrl; i++) {
-          // resp.channels  window.scbtFollowedChannelsArr = []; user_username
-          window.scbtFollowedChannelsArr.push(resp.channels[i].user_username);
-        }
+      method: 'GET',
+      mode: 'cors',
+      cache: 'no-cache',
+    })
+    .then(function(res){ if (res.ok) { return res.json(); } else { return Promise.reject(res.status); } })
+    .then(function(resp){ 
+    if ( (resp == null || resp.length === 0) || (isNaN(resp) == false) ) { console.log('api error1'); console.log( resp ); } else {
+      if (resp == 'error') {
+        console.log('api error2'); serviceid = channelid = videoid = res = arr = arrl = arr2 = resp = null; return false;
+      } else {
         
-        console.log(window.scbtFollowedChannelsArr);
-        console.log(window.scbtnextCursor);
-        console.log(resp.nextCursor);
+        console.log('RESPONSE doing scbt_get_followed_channels_from_api ' + window.scbtGetWhat);
+        console.log( resp );
+        console.log(typeof resp); // object
 
-        if (window.scbtnextCursor) {
-          setTimeout(function(){ scbt_get_followed_channels_from_api(window.scbtnextCursor); }, 3000); return false;
-        } else {
-          console.log('done with scbt_get_followed_channels_from_api');
-          if (window.scbtGetWhat == 'clips') {
-            document.querySelectorAll('#scbtClipsMenu')[0].innerHTML = '';
-            document.querySelectorAll('#scbtClipsMenu')[0].classList.add('scbt-bl');
-            scbt_loop_through_follower_clips();  // scbtClipsMenu  .classList.add('scbt-bl');
+        if (typeof resp != 'object') { console.log('api error2'); return false; }
+
+          if (resp.nextCursor && resp.nextCursor != '0') {
+            window.scbtnextCursor = resp.nextCursor;
+          } else {
+            window.scbtnextCursor = null;
           }
-          if (window.scbtGetWhat == 'streams') {
-            document.querySelectorAll('#scbtClipsMenu')[0].innerHTML = '';
-            document.querySelectorAll('#scbtClipsMenu')[0].classList.add('scbt-bl');
-            scbt_loop_through_follower_streams();
+          if (resp.channels) { } else { console.log('api error3'); return false; }
+
+          var arrl = resp.channels.length;
+          for (var i = 0; i < arrl; i++) {
+            // resp.channels  window.scbtFollowedChannelsArr = []; user_username
+            window.scbtFollowedChannelsArr.push(resp.channels[i].user_username);
           }
+          
+          console.log(window.scbtFollowedChannelsArr);
+          console.log(window.scbtnextCursor);
+          console.log(resp.nextCursor);
+
+          if (window.scbtnextCursor) {
+            setTimeout(function(){ scbt_get_followed_channels_from_api(window.scbtnextCursor); }, 3000); return false;
+          } else {
+            console.log('done with scbt_get_followed_channels_from_api');
+            var today = 'scbtFollowedChannels' + new Date().toISOString().slice(0, 10);
+            localStorage.setItem(today, JSON.stringify(window.scbtFollowedChannelsArr)); 
+
+            if (window.scbtGetWhat == 'clips') {
+              scbt_loop_through_followed('Clip');
+            }
+            if (window.scbtGetWhat == 'streams') {
+              scbt_loop_through_followed('Stream');
+            }
+          }
+
         }
-
       }
-    }
-  })
+    })
   .catch(err => {
      console.log(err); serviceid = channelid = videoid = res = arr = arrl = arr2 = resp = null; return false;
   });
-
-
 }
 
 
+function scbt_get_stream_from_api(username) {
+  console.log('doing scbt_get_stream_from_api with: ' + username);
 
-async function scbt_loop_through_follower_clips() {
-  console.log('doing scbt_loop_through_follower_clips with scbtFollowedChannelsArr');
-  console.log(window.scbtFollowedChannelsArr);
-  var shuffled = window.scbtFollowedChannelsArr 
-    .map(value => ({ value, sort: Math.random() }))
-    .sort((a, b) => a.sort - b.sort)
-    .map(({ value }) => value);
-  window.scbtFollowedChannelsArr = shuffled;
-
-  var arrl = window.scbtFollowedChannelsArr.length;
-  for (var i = 0; i < arrl; i++) {
-    // await scbt_get_clips(window.scbtFollowedChannelsArr[i]);
-    await scbt_get_clips(window.scbtFollowedChannelsArr[i]);
-  }
-  return false;
-}
-
-
-async function scbt_loop_through_follower_streams() {
-  console.log('doing scbt_loop_through_follower_streams with scbtFollowedChannelsArr');
-  console.log(window.scbtFollowedChannelsArr);
-  var shuffled = window.scbtFollowedChannelsArr 
-    .map(value => ({ value, sort: Math.random() }))
-    .sort((a, b) => a.sort - b.sort)
-    .map(({ value }) => value);
-  window.scbtFollowedChannelsArr = shuffled;
-
-  var arrl = window.scbtFollowedChannelsArr.length;
-  for (var i = 0; i < arrl; i++) {
-    // await scbt_get_clips(window.scbtFollowedChannelsArr[i]);
-    await scbt_get_streams(window.scbtFollowedChannelsArr[i]);
-  }
-  return false;
-}
-
-
-function scbt_get_vods(username) {
-  console.log('doing scbt_get_vods with: ' + username);
-
-fetch('https://kick.com/api/v2/channels/' + username + '/videos/latest',
-  {
-    method: 'GET',
-    mode: 'cors',
-    cache: 'no-cache',
-  })
-  .then(function(res){ if (res.ok) { return res.json(); } else { return Promise.reject(res.status); } })
-  .then(function(resp){ 
-  if ( (resp == null || resp.length === 0) || (isNaN(resp) == false) ) { console.log('api error1'); console.log( resp ); return false; } else {
-    if (resp == 'error') {
-      console.log('api error2'); serviceid = channelid = videoid = res = arr = arrl = arr2 = resp = null; return false;
-    } else {
-      
-      console.log('RESPONSE scbt_get_vods');
-      console.log( resp );
-      console.log(typeof resp); // object
-
-      if (typeof resp != 'object') { console.log('api error2'); return false; }
-      if (resp.data) { } else { console.log('api error3'); return false; }
-
-        var theHTML = '';
-        theHTML = theHTML + '<div class="rounded p-2 transition-all duration-300 ease-trail hover:bg-secondary-lighter">';
-        theHTML = theHTML + '<div class="group relative block aspect-video cursor-pointer overflow-hidden">';
-        theHTML = theHTML + '<div class="pointer-events-none absolute left-0 top-0 z-10 hidden h-full w-full rounded opacity-0 lg:block"></div>';
-        theHTML = theHTML + '<div class="absolute left-0 top-0 h-full w-full bg-secondary">';
-        theHTML = theHTML + '<div data-v-36ee32dd="" class="relative h-full w-full">';
-        theHTML = theHTML + '<img data-v-36ee32dd="" srcset="" src="' + resp.data.thumbnail.src + '" class="w-full object-cover h-full" alt="image" sizes="18vw">'; // https://clips.kick.com/clips/f331455b-2c41-4f39-8f7b-f8a282c12dad-thumbnail.jpeg
-        theHTML = theHTML + '</div>';
-        theHTML = theHTML + '</div>';
-
-        theHTML = theHTML + '</div>';
-
-        theHTML = theHTML + '<div class="mt-3 flex w-full items-start justify-between overflow-hidden">';
-        theHTML = theHTML + '<div class="flex w-full grow items-stretch space-x-3">';
-        theHTML = theHTML + '<div class="leading-tight"></div>';
+  fetch('https://kick.com/api/v2/channels/' + username + '/videos/latest',
+    {
+      method: 'GET',
+      mode: 'cors',
+      cache: 'no-cache',
+    })
+    .then(function(res){ if (res.ok) { return res.json(); } else { return Promise.reject(res.status); } })
+    .then(function(resp){ 
+    if ( (resp == null || resp.length === 0) || (isNaN(resp) == false) ) { console.log('api error1'); console.log( resp ); return false; } else {
+      if (resp == 'error') {
+        console.log('api error2'); serviceid = channelid = videoid = res = arr = arrl = arr2 = resp = null; return false;
+      } else {
         
-        theHTML = theHTML + '<div class="grow overflow-hidden">';
-        theHTML = theHTML + '<span class="block cursor-pointer truncate font-semibold lg:hover:text-primary">' + resp.data.session_title + '</span>'; // shame corner
-        theHTML = theHTML + '<div class="truncate leading-none">';
-        theHTML = theHTML + '<a aria-current="page" href="/' + username + '" class="router-link-active router-link-exact-active text-xs font-semibold lg:hover:text-primary">' + username + '</a>'; // Chopstix
-        theHTML = theHTML + '</div>';
-        theHTML = theHTML + '<div class="truncate leading-none">';
-        theHTML = theHTML + '</div></div></div></div></div>';
-        document.querySelectorAll('#scbtClipsMenu')[0].insertAdjacentHTML('beforeend', theHTML);  
+        console.log('RESPONSE scbt_get_stream_from_api');
+        console.log( resp );
+        console.log(typeof resp); // object
+
+        if (typeof resp != 'object') { console.log('api error2'); return false; }
+        if (resp.data) { } else { console.log('api error3'); return false; }
+          var videoObj = scbt_get_videoObj();
+          if (resp.data.video && resp.data.video.uuid) {
+            videoObj.video_id = resp.data.video.uuid;  
+          }
+          if (resp.data.thumbnail && resp.data.thumbnail.src) {
+            videoObj.video_thumbnail = resp.data.thumbnail.src;
+          }
+          if (resp.data && resp.data.session_title) {
+            videoObj.video_title = resp.data.session_title;  
+          }
+          var today = 'scbtFollowedStream' + new Date().toISOString().slice(0, 10) + username;
+          localStorage.setItem(today, JSON.stringify(videoObj)); 
+          scbt_helper_build_recent_feed(videoObj);
+        }
       }
-    }
-  })
+    })
   .catch(err => {
      console.log(err); serviceid = channelid = videoid = res = arr = arrl = arr2 = resp = null; return false;
   });
-
-
 }
 
 
-
-function scbt_get_clips(username) {
-  console.log('doing scbt_get_clips with: ' + username);
+function scbt_get_clips_from_api(username) {
+  console.log('doing scbt_get_clips_from_api with: ' + username);
   fetch('https://kick.com/api/v2/channels/' + username + '/clips?cursor=0&sort=date&time=all',
+    {
+      method: 'GET',
+      mode: 'cors',
+      cache: 'no-cache',
+    })
+    .then(function(res){ if (res.ok) { return res.json(); } else { return Promise.reject(res.status); } })
+    .then(function(resp){ 
+    if ( (resp == null || resp.length === 0) || (isNaN(resp) == false) ) { console.log('api error1'); console.log( resp ); return false; } else {
+      if (resp == 'error') {
+        console.log('api error2'); serviceid = channelid = videoid = res = arr = arrl = arr2 = resp = null; return false;
+      } else {
+        
+        console.log('RESPONSE scbt_get_clips_from_api');
+        console.log( resp );
+        console.log(typeof resp); // object
+
+        if (typeof resp != 'object') { console.log('api error2'); return false; }
+        if (resp.clips) { } else { console.log('api error3'); return false; }
+
+        var arrl = resp.clips.length;
+        if (arrl > 3) { arrl = 3; }
+        for (var i = 0; i < arrl; i++) {
+          var videoObj = scbt_get_videoObj();
+          videoObj = scbt_get_videoObj_populated(videoObj, resp.clips[i]);
+          var today = 'scbtFollowedClip' + new Date().toISOString().slice(0, 10) + username;
+          localStorage.setItem(today, JSON.stringify(videoObj));
+          scbt_helper_build_recent_feed(videoObj);
+        }
+
+        }
+      }
+    })
+  .catch(err => {
+     console.log(err); serviceid = channelid = videoid = res = arr = arrl = arr2 = resp = null; return false;
+  });
+}
+
+
+function scbt_get_recent_clips_from_api(categoryStr) {
+  if (!categoryStr) {  return false; }
+  console.log('doing scbt_get_recent_clips_from_api with: ' + categoryStr);
+  // https://kick.com/api/v2/categories/just-chatting/clips?cursor=0&sort=date&time=day
+  // https://kick.com/api/v2/categories/fortnite/clips?cursor=0&sort=date&time=day
+  var endpoint = 'https://kick.com/api/v2/categories/' + categoryStr + '/clips?cursor=0&sort=date&time=day';
+  fetch(endpoint,
   {
     method: 'GET',
     mode: 'cors',
@@ -6395,76 +6766,114 @@ function scbt_get_clips(username) {
       console.log('api error2'); serviceid = channelid = videoid = res = arr = arrl = arr2 = resp = null; return false;
     } else {
       
-      console.log('RESPONSE scbt_get_clips');
+      console.log('RESPONSE scbt_get_recent_clips_from_api');
       console.log( resp );
       console.log(typeof resp); // object
 
       if (typeof resp != 'object') { console.log('api error2'); return false; }
       if (resp.clips) { } else { console.log('api error3'); return false; }
 
+      // scbtfortniteClip
       var arrl = resp.clips.length;
+      if (arrl > 20) { arrl = 20; }
       for (var i = 0; i < arrl; i++) {
-          // resp.clips[i].user_username // scbtClipsMenu
-        // username = mmamallamaface
-        var theHTML = '';
-        theHTML = theHTML + '<div class="rounded p-2 transition-all duration-300 ease-trail hover:bg-secondary-lighter">';
-        theHTML = theHTML + '<div class="group relative block aspect-video cursor-pointer overflow-hidden">';
-        theHTML = theHTML + '<div class="pointer-events-none absolute left-0 top-0 z-10 hidden h-full w-full rounded opacity-0 lg:block"></div>';
-        theHTML = theHTML + '<div class="absolute left-0 top-0 h-full w-full bg-secondary">';
-        theHTML = theHTML + '<div data-v-36ee32dd="" class="relative h-full w-full">';
-        theHTML = theHTML + '<img data-v-36ee32dd="" srcset="" src="' + resp.clips[i].thumbnail_url + '" class="w-full object-cover h-full" alt="image" sizes="18vw">'; // https://clips.kick.com/clips/f331455b-2c41-4f39-8f7b-f8a282c12dad-thumbnail.jpeg
-        theHTML = theHTML + '</div>';
-        theHTML = theHTML + '</div>';
-
-        theHTML = theHTML + '<span class="absolute left-2 top-2 rounded bg-black/80 px-1 text-sm font-light text-white">' + resp.clips[i].duration + '</span>';
-        theHTML = theHTML + '<span class="absolute bottom-2 left-2 block truncate rounded bg-black/80 px-1 text-right text-sm font-light text-white" style="max-width: 45%;">' + resp.clips[i].view_count + '-' + resp.clips[i].likes_count + '</span>';
-        theHTML = theHTML + '<span class="absolute bottom-2 right-2 block truncate rounded bg-black/80 px-1 text-right text-sm font-light text-white" style="max-width: 45%;">' + resp.clips[i].created_at + '</span>';
-        theHTML = theHTML + '</div>';
-
-        theHTML = theHTML + '<div class="mt-3 flex w-full items-start justify-between overflow-hidden">';
-        theHTML = theHTML + '<div class="flex w-full grow items-stretch space-x-3">';
-        theHTML = theHTML + '<div class="leading-tight">';
-        theHTML = theHTML + '<a href="/categories/' + resp.clips[i].category.parent_category + '/' + resp.clips[i].category.slug + '" class="block h-full w-12 bg-secondary-light">'; // /categories/games/fortnite
-        theHTML = theHTML + '<div data-v-36ee32dd="" class="relative h-full w-full">';
-
-        theHTML = theHTML + '<img data-v-36ee32dd="" srcset="' + resp.clips[i].category.responsive + '" src="' + resp.clips[i].category.responsive + '" class="w-full object-cover h-full" alt="Fortnite" sizes="4vw">'; // https://files.kick.com/images/subcategories/3/banner/fortnite.jpg
-        theHTML = theHTML + '</div></a></div>';
-        
-        theHTML = theHTML + '<div class="grow overflow-hidden">';
-        theHTML = theHTML + '<span class="block cursor-pointer truncate font-semibold lg:hover:text-primary">' + resp.clips[i].title + '</span>'; // shame corner
-        theHTML = theHTML + '<div class="truncate leading-none">';
-        theHTML = theHTML + '<a aria-current="page" href="/' + resp.clips[i].channel.slug + '" class="router-link-active router-link-exact-active text-xs font-semibold lg:hover:text-primary">' + resp.clips[i].channel.username + '</a>'; // Chopstix
-        theHTML = theHTML + '</div>';
-        theHTML = theHTML + '<div class="truncate leading-none">';
-        theHTML = theHTML + '<a href="/' + resp.clips[i].creator.slug + '" class="text-xs font-semibold text-gray-400 lg:hover:text-primary">Clipped by' + resp.clips[i].creator.username + '</a>'; // // clipuser
-        theHTML = theHTML + '</div></div></div></div></div>';
-        document.querySelectorAll('#scbtClipsMenu')[0].insertAdjacentHTML('beforeend', theHTML);
+        var videoObj = scbt_get_videoObj();
+        videoObj = scbt_get_videoObj_populated(videoObj, resp.clips[i]);
+        var today = 'scbt' + categoryStr + 'Clip' + new Date().toISOString().slice(0, 10) + i;
+        localStorage.setItem(today, JSON.stringify(videoObj));
+        scbt_helper_build_recent_feed(videoObj);
       }
-        
 
+      var elemArr = document.body.getElementsByClassName('scbtLoading');
+      if (elemArr[0]) {
+        elemArr[0].style.display = 'none';
       }
+
     }
+  }
   })
   .catch(err => {
      console.log(err); serviceid = channelid = videoid = res = arr = arrl = arr2 = resp = null; return false;
   });
-
-
+  return false;
 }
 
 
 
 
+function scbt_helper_build_recent_feed(videoObj) {
+  console.log('doing scbt_helper_build_recent_feed');
 
+  var theHTML = '';
+  theHTML = theHTML + '<div class="rounded p-2 transition-all duration-300 ease-trail hover:bg-secondary-lighter">';
+  theHTML = theHTML + '<div class="group relative block aspect-video cursor-pointer overflow-hidden">';
+  theHTML = theHTML + '<div class="pointer-events-none absolute left-0 top-0 z-10 hidden h-full w-full rounded opacity-0 lg:block"></div>';
+  
+  theHTML = theHTML + '<div class="absolute left-0 top-0 h-full w-full bg-secondary">';
+  theHTML = theHTML + '<div data-v-36ee32dd="" class="relative h-full w-full">';
+  
+  if ( videoObj.video_url && videoObj.video_url.indexOf('.mp4') > -1 ) {
+    theHTML = theHTML + '<video class="vjs-tech w-full object-cover h-full" webkit-playsinline="" playsinline="" controls poster="' + videoObj.video_thumbnail + '" src="' + videoObj.video_url + '" sizes="18vw"></video>';
+  } 
+  else if ( videoObj.video_url && videoObj.video_url.indexOf('playlist') > -1 ) {
+    theHTML = theHTML + '<a href="https://kick.com/' + videoObj.video_channel_slug + '?clip=' + videoObj.video_id + '">' + '<video class="vjs-tech w-full object-cover h-full" webkit-playsinline="" playsinline="" controls poster="' + videoObj.video_thumbnail + '" sizes="18vw"></video></a>';
+  }
+  else {
+    theHTML = theHTML + '<a href="https://kick.com/video/' + videoObj.video_id + '"><video class="vjs-tech w-full object-cover h-full" webkit-playsinline="" playsinline=""  poster="' + videoObj.video_thumbnail + '" sizes="18vw"></video></a>';
+  }
 
+  theHTML = theHTML + '</div>';
+  theHTML = theHTML + '</div>';
 
+  if (videoObj.video_duration) {
+    theHTML = theHTML + '<span class="absolute left-2 top-2 rounded bg-black/80 px-1 text-xs font-light text-white">' + videoObj.video_duration + ' sec</span>';
+  }
 
+  if (videoObj.video_view_count) {
+    theHTML = theHTML + '<span class="absolute bottom-2 left-2 block truncate rounded bg-black/80 px-1 text-right text-xs font-light text-white" style="max-width: 45%;">' + videoObj.video_view_count + 'views-' + videoObj.video_likes_count + '</span>';
+    theHTML = theHTML + '<span class="absolute bottom-2 right-2 block truncate rounded bg-black/80 px-1 text-right text-sm font-light text-white" style="max-width: 45%;">' + videoObj.video_created_at + '</span>';
+  }
 
+  theHTML = theHTML + '</div>';
 
+  theHTML = theHTML + '<div class="mt-3 flex w-full items-start justify-between overflow-hidden">';
+  theHTML = theHTML + '<div class="flex w-full grow items-stretch space-x-3">';
+  theHTML = theHTML + '<div class="leading-tight">';
+  
+  if (videoObj.video_parent_category) {
+    theHTML = theHTML + '<a target="_blank" href="/categories/' + videoObj.video_parent_category + '/' + videoObj.video_category_slug + '" class="block h-full w-12 bg-secondary-light">';
+    theHTML = theHTML + '<div data-v-36ee32dd="" class="relative h-full w-full">';
+    theHTML = theHTML + '<img data-v-36ee32dd="" srcset="' + videoObj.video_category_responsive + '" src="' + videoObj.video_category_responsive + '" class="w-full object-cover h-full" alt="' + videoObj.video_category_slug + '" sizes="4vw"></div></a>';
+  }
+  theHTML = theHTML + '</div>';
+  
+  theHTML = theHTML + '<div class="grow overflow-hidden">';
+  
+  if ( videoObj.video_id && videoObj.video_id.indexOf('clip') > -1 ) {
+    theHTML = theHTML + '<a href="https://kick.com/' + videoObj.video_channel_slug + '?clip=' + videoObj.video_id + '"  class="block cursor-pointer truncate font-semibold lg:hover:text-primary">' + videoObj.video_title + '</a>';
+  } else {
+    theHTML = theHTML + '<a href="https://kick.com/video/' + videoObj.video_id + '"  class="block cursor-pointer truncate font-semibold lg:hover:text-primary">' + videoObj.video_title + '</a>';
+  }
 
+  theHTML = theHTML + '<div class="truncate leading-none">';
+  theHTML = theHTML + '<a aria-current="page" href="/' + videoObj.video_channel_slug + '" class="router-link-active router-link-exact-active text-xs font-semibold lg:hover:text-primary">' + videoObj.video_channel_username + '</a>';
+  theHTML = theHTML + '</div>';
 
+  if (videoObj.video_creator_slug) {
+    theHTML = theHTML + '<div class="truncate leading-none">';
+    theHTML = theHTML + '<a target="_blank"  href="/' + videoObj.video_creator_slug + '" class="text-xs font-semibold text-gray-400 lg:hover:text-primary">Clipped by' + videoObj.video_creator_username + '</a>';
+    theHTML = theHTML + '</div>';
+  }
 
+  theHTML = theHTML + '</div></div></div></div>';
 
+  var elemArr = document.getElementsByClassName('scbtClipsMenuContent');
+  if (elemArr[0]) {
+    elemArr[0].insertAdjacentHTML('beforeend', theHTML);
+  }
+
+  theHTML = null; elemArr = null; return false;
+}
 
 
 function scbt_helper_load_chat_replay_from_api(serviceid, channelid, videoid) {
@@ -7349,7 +7758,7 @@ function scbt_user_check_video_speed(e) {
   console.log(e);
 
   if (e) {
-    e.preventDefault();
+    if (e.preventDefault) { e.preventDefault(); }
       if (e.target) {
         if (e.target.id) {
           console.log(e.target.id);
@@ -7399,7 +7808,7 @@ function scbt_user_check_video_speed(e) {
 
 function scbt_toggle_video_speed_menu(e) {
   if (e) {
-    e.preventDefault();
+    if (e.preventDefault) { e.preventDefault(); }
   }
   if (e.target.classList.contains('vjs-hover') ) {
     e.target.classList.remove('vjs-hover');
@@ -7478,38 +7887,38 @@ function scbt_user_share_button_handler(e) {
 }
 
 
+function scbt_user_toggle_clips_menu(e) {
+  console.log('doing scbt_user_toggle_clips_menu');
+  if (e) { if (e.preventDefault) { e.preventDefault(); } }
 
-function scbt_user_load_recent_followed_clips() {
-  console.log('doing scbt_user_load_recent_followed_clips');
-  window.scbtOptionsMenuRef.classList.remove('scbt-bl');
-  var elemArr = document.body.querySelectorAll('.scbtLoading');
+  if (window.scbtVODIs === true) {
+    scbt_user_search_for_saved_chat();
+    return false;
+  }
+
+  var elemArr = document.body.getElementsByClassName('scbtClipsToggleMenu');
   if (elemArr[0]) {
-    elemArr[0].style.display = 'block';
+    if (elemArr[0].classList.contains('scbt-bl') ) {
+      elemArr[0].classList.remove('scbt-bl');
+    } else {
+      elemArr[0].classList.add('scbt-bl');
+    }
   }
   
-  scbt_get_followed_channels_from_api('clips');
-  return false;
-}
-
-
-function scbt_user_load_recent_followed_streams() {
-  console.log('doing scbt_user_load_recent_followed_streams');
-  window.scbtOptionsMenuRef.classList.remove('scbt-bl');
-  var elemArr = document.body.querySelectorAll('.scbtLoading');
+  var elemArr = document.body.getElementsByClassName('scbtClipsMenuWrapper');
   if (elemArr[0]) {
-    elemArr[0].style.display = 'block';
+    if (elemArr[0].classList.contains('scbt-bl') ) {
+      elemArr[0].classList.remove('scbt-bl');
+    } else {
+      elemArr[0].classList.add('scbt-bl');
+    }
   }
 
-  scbt_get_followed_channels_from_api('streams');
   return false;
 }
-
-
 
 
 function scbt_helper_load_options(clicked) {
-    // console.log('doing scbt_helper_load_options - was clicked?: ' + clicked);
-
     if (window.hasOwnProperty('scbtKickIs')) { } else {
       window.scbtKickIs = true;
       scbt_get_str_serviceid();
@@ -7650,14 +8059,6 @@ window.addEventListener('unhandledrejection', e => {
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, goCapture) {
-
-    // console.log('chrome.runtime.onMessage.addListener request');
-    // console.log(request);
-    // request.tabUpdated.active == true
-    // request.tabUpdated.status == 'complete'
-    // request.tabUpdated.url: "https://kick.com/deepak"
-    // request.chatloaded: 'kickstarrchatloaded'  window.location.href
-    // || (request.tabUpdated.status != 'complete')
 
     if (typeof request === 'object') {
       if ( request.tabUpdated && (typeof request.tabUpdated === 'object') ) {         
