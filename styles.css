@@ -116,6 +116,7 @@
 .scbt-mobile .scbtToggleButton2.scbt-fl, 
 .scbt-options-wrapper.scbt-bl.scbt-fl, 
 .scbtSideMenu.scbt-fl,
+.scbtChatMenu.scbt-fl,
 .scbtChatToggleMenu.scbt-fl,
 .scbtOptionsMenu.scbt-fl,
 .scbtChatWrapper.scbt-fl,
@@ -404,3 +405,8 @@
 .scbt-kick .vjs-menu-button-popup .scbt-speed {
     position: initial;
 }
+
+.scbt-kick .scbtfeature10Wrapper {
+    display: none;
+}
+
