@@ -208,7 +208,6 @@
 }
 
 .scbtChatWrapper {
-    display: block;
     position: absolute;
     background: #222;
     height: 300px;
@@ -410,3 +409,48 @@
     display: none;
 }
 
+
+.scbt-kick .scbtChatPreviousContent p, .scbt-kick .scbtChatPreviousContent button {
+    display: block;
+    clear: both;
+}
+
+.fill-height-or-more {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.fill-height-or-more > div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-height: 150px;
+  overflow-y: scroll;
+}
+.some-area > div {
+  border-bottom: 1px solid black;
+}
+.some-area > div:nth-child(even) {
+  
+}
+.some-area > div:nth-child(odd) {
+  
+}
+.some-area > div p {
+  margin: 0;
+}
+.fill-height-or-more {
+    width: 0px;
+}
+.fill-height-or-more.has-content {
+    width: fit-content;
+}
+
+.scbt-mobile.scbt-kick .scbtSideMenu {
+    top: 0px;
+}
+
+.scbt-mobile.scbt-kick .scbtChatToggleMenu {
+    top: 43px;
+}
