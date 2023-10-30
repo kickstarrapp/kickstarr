@@ -59,6 +59,7 @@ if ( window.hasOwnProperty('scbtVODLoadedIs') ) {  } else { window.scbtVODLoaded
 if ( window.hasOwnProperty('scbtVODCommentsLoadedIs') ) {  } else { window.scbtVODCommentsLoadedIs = false; }
 if ( window.hasOwnProperty('scbtKeybindOnIs') ) {  } else { window.scbtKeybindOnIs = false; }
 if ( window.hasOwnProperty('scbtChannelPageIs') ) {  } else { window.scbtChannelPageIs = false; }
+if ( window.hasOwnProperty('scbtPopoutIs') ) {  } else { window.scbtPopoutIs = false; }
 
 if ( window.hasOwnProperty('scbtNonBotChatShow') ) {  } else { window.scbtNonBotChatShow = 1; }
 if ( window.hasOwnProperty('scbtSubChatShow') ) {  } else { window.scbtSubChatShow = 1; }
@@ -1643,11 +1644,15 @@ function scbt_helper_build_chat_by_dbname_string(dbName) {
       if (!successAllObj.target.result.length || successAllObj.target.result.length < 1) { setTimeout(function(){ scbt_helper_toast('Error: build chat for live stream not found.'); }, 2700);  return false; }
       
       window.scbtDbNameToSearch = dbName;
-      var chatObjs = successAllObj.target.result;
+      var dbArr = scbt_get_arr_from_dbname_string(window.scbtDbNameToSearch);
       window.scbtChatContentRef.innerHTML = '';
-      window.scbtChatARef.textContent = 'Saved Chat From ' + chatObjs[0].username + ' on ' + chatObjs[0].message;
+      var chatObjs = successAllObj.target.result;
+      var str = chatObjs[0].message;
+
+      // window.scbtChatARef.textContent = 'Saved Chat From ' + chatObjs[0].username + ' on ' + chatObjs[0].message;
+      window.scbtChatARef.textContent = 'saved chat from ' + dbArr[2] + ' on ' + dbArr[1] + ': ' + dbArr[3] + ' ' + str;
       window.scbtChatBRef.textContent = '';
-      // chatObjs = scbt_get_arr_sortedtimes_from_arr(chatObjs);
+      chatObjs = scbt_get_arr_sortedtimes_from_arr(chatObjs);
       [].forEach.call(chatObjs, function(chatObj) {
         var theHTML = scbt_helper_build_chat_line_from_obj(chatObj);
         window.scbtChatContentRef.insertAdjacentHTML('beforeend', theHTML);
@@ -1660,6 +1665,7 @@ function scbt_helper_build_chat_by_dbname_string(dbName) {
            scbt_helper_process_chat_line(chatElm, false);
         });
         scbt_user_chat_down_to_bottom();
+        dbArr = null; chatObjs = null; str = null;
       }, 2000);
     };
     store.getAll().onerror = function(errorAllObj) {
@@ -2185,12 +2191,15 @@ function scbt_user_search_saved_chat(e) {
       var chatObjArr = e2.target.result;
       if (chatObjArr.length < 1) { scbt_helper_toast('Error: this stream chat not found for display'); return false; }
 
+      var str = chatObjArr[0].message;
       var dbArr = scbt_get_arr_from_dbname_string(window.scbtDbNameToSearch);
       window.scbtChatContentRef.innerHTML = '';
       chatObjArr = scbt_get_arr_sortedtimes_from_arr(chatObjArr);
-      window.scbtChatARef.textContent = dbArr[2] + ' on ' + dbArr[1] + ': ' + chatObjArr[0].message;
+      
+      window.scbtChatARef.textContent = dbArr[2] + ' on ' + dbArr[1] + ': ' + dbArr[3] + ' ' + str;
       window.scbtChatBRef.textContent = labelMessage;
       window.scbtChatWrapperRef.classList.add('scbt-bl');
+      window.scbtChatContentRef.classList.add('scbt-bl');
       
       if (searchType == 'byevent') {
         [].forEach.call(chatObjArr, function(chatObj) {
@@ -2728,6 +2737,8 @@ function scbt_user_toggle_load_refresh_menu() {
     return false;
   }
   // load stream chats of this user
+  console.log('window.scbtChannelPageIs ' + window.scbtChannelPageIs);
+
   if (window.scbtChannelPageIs === true) {
     scbt_user_toggle_user_chats_menu();
     return false;
@@ -2743,29 +2754,111 @@ function scbt_user_toggle_load_refresh_menu() {
 
 
 function scbt_user_toggle_user_chats_menu() {
-  var str = scbt_get_str_channelid();
+  var channelid = scbt_get_str_channelid();
+  var channelArr = [];
+  console.log('doing scbt_user_toggle_user_chats_menu with: ' + channelid);
+
   indexedDB.databases().then((arr) => {
     if (arr.length > 0) {
       var arrl = arr.length;
       for (var i = 0; i < arrl; i++) {
         var dbName = arr[i].name;
         if (dbName.startsWith('savedchat') ) {
-          if (dbName.indexOf(str) > -1) {
-            // you watched streamer on 9-13-2023. Return to it?
+          if (dbName.indexOf(channelid) > -1) {
+            channelArr.push(dbName);
           }
         }
       }
+      console.log(channelArr);
+      scbt_some_stuff(channelid, channelArr);
       return false;
     }
   });
 }
 
 
+function scbt_some_stuff(channelid, channelArr) {
+  console.log("doing scbt_some_stuff");
+  fetch('https://kick.com/api/v1/channels/' + channelid,
+    {
+      method: 'GET',
+      mode: 'cors',
+      cache: 'no-cache',
+    })
+    .then(function(res){ if (res.ok) { return res.json(); } else { return Promise.reject(res.status); } })
+    .then(function(resp){ 
+    if ( (resp == null || resp.length === 0) || (isNaN(resp) == false) ) { console.log('api error1'); console.log( resp ); return false; } else {
+      if (resp == 'error') {
+        console.log('api error2'); serviceid = channelid = videoid = res = arr = arrl = arr2 = resp = null; return false;
+      } else {
+
+        if (typeof resp != 'object') { console.log('api error2'); return false; }
+        var arr = [];
+        if (resp.previous_livestreams && resp.previous_livestreams.length) {
+          var respl = resp.previous_livestreams.length;
+          console.log("yes " + respl);
+          for (var i = 0; i < respl; i++) {
+            if (resp.previous_livestreams[i].start_time) {
+              var arr2 = resp.previous_livestreams[i].start_time.split(' ');
+              // console.log(arr2[0]);
+              for (var ii = 0; ii < channelArr.length; ii++) {
+                // console.log(channelArr[ii]);
+                if (channelArr[ii].indexOf(arr2[0]) > -1 ) {
+                  console.log(channelArr[ii]);
+                  arr.push(resp.previous_livestreams[i]);
+                }
+              }
+
+
+            }
+          }
+          console.log("THE ANSWER IS: ");
+          console.log(arr);
+
+          if (arr.length && arr.length > 0) {
+            var elemArr = document.body.getElementsByClassName('scbtClipsMenuWrapper');
+            if (elemArr[0]) {
+              elemArr[0].classList.add('scbt-bl');
+            }
+          }
+
+          var theHTML = "";
+          for (var i = 0; i < arr.length; i++) {
+            console.log("continue watching:" + arr[i].session_title + " from " + arr[i].start_time + " https://kick.com/video/" + arr[i].video.uuid);
+            theHTML = theHTML + "<p>Continue Watching:<br><a href='https://kick.com/video/" +  arr[i].video.uuid + "'>" + arr[i].session_title + " from " + arr[i].start_time + "</a></p>&nbsp;<br>";
+          }
+          document.body.getElementsByClassName('scbtClipsMenuContent')[0].innerHTML = theHTML;
+
+
+        }
+
+
+        }
+      }
+    })
+  .catch(err => {
+     console.log(err); serviceid = channelid = videoid = res = arr = arrl = arr2 = resp = null; return false;
+  });  
+
+
+}
+
+
+
+
+
+
+
 async function scbt_user_search_for_saved_chat() {
+  console.log('doing scbt_user_search_for_saved_chat with url: ' + window.location.href);
   var str = localStorage.getItem(window.location.href);
+  console.log("scbt_user_search_for_saved_chat with str " + str);
+
   if (str) {
+    console.log("scbt_user_search_for_saved_chat str exists: " + str);
     var dbExists = await scbt_get_binary_if_db_exists(str);
     if (dbExists === true) {
+      console.log("scbt_user_search_for_saved_chat str dbExists loading chat database from localStorage ");
       // loading chat database from localStorage
       var e = {};
       e.srcElement = {};
@@ -2780,8 +2873,10 @@ async function scbt_user_search_for_saved_chat() {
   var channelidStr = scbt_get_str_channelid();
   var videoidStr = scbt_get_str_videoid();
 
+  console.log("scbt_user_search_for_saved_chat str looking for serviceidStr channelidStr videoidStr - " + serviceidStr + " - " + channelidStr + " - " + videoidStr);
   if (serviceidStr && channelidStr && videoidStr) {
     var dbStr = 'savedchat' + '&' + serviceidStr + '&' + channelidStr + '&' + videoidStr;
+    console.log("scbt_user_search_for_saved_chat with dbStr " + dbStr);
     var dbExists = await scbt_get_binary_if_db_exists(dbStr);
     if (dbExists === true) {
       // loading chat database from indexeddb
@@ -2792,8 +2887,10 @@ async function scbt_user_search_for_saved_chat() {
       e.srcElement.dataset.dbname = dbStr;
       scbt_user_chat_load_by_videoid(e);
       return false;
-    }    
-    scbt_helper_load_local_chat_from_api(serviceidStr, channelidStr, videoidStr);
+    }
+    if (window.scbtserviceid == 'kick') {
+      scbt_helper_load_local_chat_from_api(serviceidStr, channelidStr, videoidStr);
+    }
   }
   
   if (serviceidStr && channelidStr && videoidStr) {
@@ -2906,25 +3003,25 @@ function scbt_helper_populate_chat_for_replay(resp, i) {
         var theHTML = scbt_helper_build_chat_line_from_arr(chatLine);
         // window.scbtChatContentRef.insertAdjacentHTML('beforeend', theHTML);
         if (i == 0) {
-          document.getElementsByClassName('scbtChatContent')[0].insertAdjacentHTML('beforeend', theHTML);
+          document.getElementsByClassName('scbtChatContent')[0].insertAdjacentHTML('beforeend', theHTML); // kick
         }
         if (i == 1) {
-          document.getElementsByClassName('scbtChatContent2')[0].insertAdjacentHTML('beforeend', theHTML);
+          document.getElementsByClassName('scbtChatContent2')[0].insertAdjacentHTML('beforeend', theHTML); // odysee
         }
         if (i == 2) {
-          document.getElementsByClassName('scbtChatContent3')[0].insertAdjacentHTML('beforeend', theHTML);
+          document.getElementsByClassName('scbtChatContent3')[0].insertAdjacentHTML('beforeend', theHTML); // rumble
         }
         if (i == 3) {
-          document.getElementsByClassName('scbtChatContent4')[0].insertAdjacentHTML('beforeend', theHTML);
+          document.getElementsByClassName('scbtChatContent4')[0].insertAdjacentHTML('beforeend', theHTML); // twitch
         }
         if (i == 4) {
-          document.getElementsByClassName('scbtChatContent5')[0].insertAdjacentHTML('beforeend', theHTML);
+          document.getElementsByClassName('scbtChatContent5')[0].insertAdjacentHTML('beforeend', theHTML); // youtube
         }
         if (i == 5) {
-          document.getElementsByClassName('scbtChatContent6')[0].insertAdjacentHTML('beforeend', theHTML);
+          document.getElementsByClassName('scbtChatContent6')[0].insertAdjacentHTML('beforeend', theHTML); // youtube2
         }
         if (i == 6) {
-          document.getElementsByClassName('scbtChatContent6')[0].insertAdjacentHTML('beforeend', theHTML);
+          document.getElementsByClassName('scbtChatContent6')[0].insertAdjacentHTML('beforeend', theHTML); // ??
         }
 
       });
@@ -3178,7 +3275,7 @@ function scbt_helper_get_menu(app, element, thefile, firstTime) {
 function scbt_helper_build_chat_line_from_obj(chatObj, chatObjFirst) {
   var classString = scbt_get_str_for_chat_classes_from_obj(chatObj);
   if (chatObjFirst) {
-    var theHTML = "<p class='scbt-chat-line " + classString + "'><span>" + chatObjFirst.username + ' stream on ' + chatObjFirst.message + "<br><span class='scbt-chat-timestamp'>" + chatObj.timestamp + "</span> : <span class='scbt-chat-username'>" + chatObj.username + "</span> <b class='scbt-chat-message'>" +  chatObj.message + "</b></p>";
+    var theHTML = "<p class='scbt-chat-line " + classString + "'><span><s>" + chatObjFirst.username + ' stream on ' + chatObjFirst.message + "</s><br><span class='scbt-chat-timestamp'>" + chatObj.timestamp + "</span> : <span class='scbt-chat-username'>" + chatObj.username + "</span> <b class='scbt-chat-message'>" +  chatObj.message + "</b></p>";
   } else {
     var theHTML = "<p class='scbt-chat-line " + classString + "'><span class='scbt-chat-timestamp'>" + chatObj.timestamp + "</span> : <span class='scbt-chat-username'>" + chatObj.username + "</span> <b class='scbt-chat-message'>" +  chatObj.message + "</b></p>";
   }
@@ -4544,19 +4641,19 @@ function scbt_helper_chat_listen() {
 function scbt_helper_chat_blur(elem) {
   elem.style.paddingLeft = '.5rem';
   elem.style.paddingRight = '.5rem';
-  elem.style.border = '1px dotted ' + window.scbtOptions.scbtBorderColor;
+  elem.style.borderBottom = '1px dotted ' + window.scbtOptions.scbtBorderColor;
 }
 
 function scbt_helper_chat_on(elem) {
   elem.style.paddingLeft = '.5rem';
   elem.style.paddingRight = '.5rem';
-  elem.style.border = '2px solid ' + window.scbtOptions.scbtBorderColor;
+  elem.style.borderBottom = '2px solid ' + window.scbtOptions.scbtBorderColor;
 }
 
 function scbt_helper_chat_off(elem) {
   elem.style.paddingLeft = 'initial';
   elem.style.paddingRight = 'initial';
-  elem.style.border = '0px';
+  elem.style.borderBottom = '0px';
 }
 
 function scbt_helper_chat_set_to_hide(elem) {
@@ -4979,7 +5076,13 @@ function scbt_user_go_to_stream(e) {
 
 
 function scbt_user_search_chat_toggle(e) {
-  if (!window.scbtDbNameToSearch) { scbt_helper_toast( ' No active stream or VOD chat '); return false; } 
+  if (!window.scbtDbNameToSearch) { 
+    window.scbtChatTitleRef.classList.remove('scbt-bl');
+    scbt_user_search_chat_toggle_close();
+    scbt_helper_toast( ' No active stream or VOD chat '); 
+    return false;
+  } 
+
   var str = 'abcxyz';
   if (e) {
     if (e.target) {
@@ -5014,6 +5117,18 @@ function scbt_user_search_chat_toggle(e) {
 
   // opening
   if (window.scbtSearchBarActiveIs === false) {
+    scbt_user_search_chat_toggle_open();
+    return false;
+  }
+  // closing
+  if (window.scbtSearchBarActiveIs === true) {
+    scbt_user_search_chat_toggle_close();
+    return false;
+  }
+}
+
+
+function scbt_user_search_chat_toggle_open() {
     window.scbtChatContentRef.innerHTML = '';
     if (window.scbtSearchChat == 'current') {
       window.scbtChatARef.textContent = 'Search this stream chat';
@@ -5030,10 +5145,10 @@ function scbt_user_search_chat_toggle(e) {
     window.scbtChatSearchInputTextRef.focus();
     window.scbtSearchBarActiveIs = true;
     return false;
-  }
+}
 
-  // closing
-  if (window.scbtSearchBarActiveIs === true) {
+
+function scbt_user_search_chat_toggle_close() {
     window.scbtChatContentRef.innerHTML = '';
     window.scbtChatARef.textContent = '';
     window.scbtChatBRef.textContent = '';
@@ -5052,8 +5167,6 @@ function scbt_user_search_chat_toggle(e) {
     window.scbtSearchBarActiveIs = false;
     window.scbtDbNameToSearch = window.scbtDbName;
     return false;
-  }
-
 }
 
 
@@ -7876,15 +7989,19 @@ if ( mutation3.addedNodes[i].querySelector('.card-category-name').textContent ==
 
 
 function scbt_user_check_video_speed(e) {
+  console.log(' @@ doing scbt_user_check_video_speed @@');
   if (e) {
+    console.log('yes1');
     if (e.preventDefault) { e.preventDefault(); }
       if (e.target) {
+        console.log('yes2');
         if (e.target.id) {
-          
+          console.log('no1');
         } else {
           var parentElm = e.target.parentElement;
-          
+          console.log('yes4');
           if (parentElm.id) {
+            console.log('yes5 ' + parentElm.id);
 
             if (parentElm.id == 'scbtSpeed25') {
               document.body.getElementsByTagName('video')[0].playbackRate = 0.25;
@@ -7926,21 +8043,27 @@ function scbt_user_check_video_speed(e) {
 
 
 function scbt_toggle_video_speed_menu(e) {
+  console.log(' -- doing scbt_toggle_video_speed_menu --');
   if (e) {
     if (e.preventDefault) { e.preventDefault(); }
   }
-  if (e.target.classList.contains('vjs-hover') ) {
-    e.target.classList.remove('vjs-hover');
-  } else {
-    e.target.classList.add('vjs-hover');
+  var elemArr = document.body.querySelectorAll('.video-js .vjs-custom-control-spacer');
+  if (elemArr[0]) {
+    if (elemArr[0].classList.contains('vjs-hover') ) {
+      elemArr[0].classList.remove('vjs-hover');
+    } else {
+      elemArr[0].classList.add('vjs-hover');
+    }
   }
   return false;
 }
 
 
 function scbt_helper_build_speed_button() {
+  console.log('doing scbt_helper_build_speed_button')
   var elemArr = document.body.querySelectorAll('.video-js .vjs-custom-control-spacer');
   if (elemArr[0]) {
+    console.log('.video-js .vjs-custom-control-spacer exists');
     elemArr[0].classList.add('vjs-menu-button-popup');
     var theHTML = '<button class="vjs-icon-hd vjs-icon-placeholder vjs-menu-button vjs-menu-button-popup vjs-button" type="button" aria-disabled="false" aria-haspopup="true" aria-expanded="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Video Speed</span></button><div class="vjs-menu scbt-speed"><ul class="vjs-menu-content" role="menu"><li id="scbtSpeed1" class="vjs-menu-item vjs-selected" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="true"><span class="vjs-menu-item-text">1</span><span class="vjs-control-text" aria-live="polite">, selected</span></li><li id="scbtSpeed25" class="vjs-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">.25</span><span class="vjs-control-text" aria-live="polite"></span></li><li id="scbtSpeed50" class="vjs-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">.5</span><span class="vjs-control-text" aria-live="polite"></span></li><li id="scbtSpeed75" class="vjs-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">.75</span><span class="vjs-control-text" aria-live="polite"></span></li><li id="scbtSpeed11" class="vjs-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">1.1</span><span class="vjs-control-text" aria-live="polite"></span></li><li id="scbtSpeed125" class="vjs-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">1.25</span><span class="vjs-control-text" aria-live="polite"></span></li><li id="scbtSpeed15" class="vjs-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">1.5</span><span class="vjs-control-text" aria-live="polite"></span></li><li id="scbtSpeed2" class="vjs-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">2</span><span class="vjs-control-text" aria-live="polite"></span></li></ul></div>';
     elemArr[0].insertAdjacentHTML('afterbegin', theHTML);
@@ -8083,6 +8206,8 @@ function scbt_helper_load_options(clicked) {
 
 
 function scbt_helper_load_local_chat_from_api(serviceid, channelid, videoid) {
+  console.log('doing scbt_helper_load_local_chat_from_api with: ' + window.location.pathname);
+
   fetch('https://kick.com/api/v1' + window.location.pathname,
   {
     method: 'GET',

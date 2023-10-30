@@ -454,3 +454,27 @@
 .scbt-mobile.scbt-kick .scbtChatToggleMenu {
     top: 43px;
 }
+
+
+.scbt-kick.scbt-mobile .scbtSideMenu {
+  right: auto;
+}
+
+.scbt-kick.scbt-mobile .scbtClipsToggleMenu {
+  position: absolute;
+  top: 60px;  
+}
+
+.scbt-kick.scbt-mobile .scbtSideMenu button {
+  width: 36px !important;  
+}
+
+.scbt-kick.scbt-mobile .scbtClipsToggleMenu button {
+  font-size: .5rem;
+}
+
+.scbt-kick.scbt-mobile .scbtClipsMenuWrapper {
+  top: 250px;
+  background: black;
+  width: 100%;
+}
